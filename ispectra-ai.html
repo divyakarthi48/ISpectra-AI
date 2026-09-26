@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ISpectra AI — Procurement Standards Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Noto+Sans+Devanagari:wght@400;500;600&family=Noto+Serif+Devanagari:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F4F7; --surface:#FFFFFF; --surface-2:#F7F8FA; --line:#DCE1E9; --line-strong:#C3CBD8;
+  --text:#18202E; --muted:#566277; --faint:#7A8598;
+  --primary:#1F4B8E; --primary-ink:#153A72; --primary-tint:#E7EDF7;
+  --nav:#12233F; --nav-text:#BFCADD; --nav-line:#25375A; --nav-hover:#1B2F52;
+  --ok:#1B6B47; --ok-tint:#E3F1E9; --warn:#9A5209; --warn-tint:#FBEEDB; --bad:#9E2C2C; --bad-tint:#F8E5E5; --neutral-tint:#EDF0F4;
+  --r-primary:#1F4B8E; --r-related:#4C5B73; --r-testing:#0D6B67; --r-safety:#9A5209; --r-normative:#5A4989;
+  --mark:#FFF1B8; --focus:#2F6FD0; --overlay:rgba(10,18,32,.45);
+  --font:'IBM Plex Sans','Noto Sans Devanagari',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --serif:'Source Serif 4','Noto Serif Devanagari',Georgia,'Times New Roman',serif;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1524; --surface:#151E30; --surface-2:#1A2439; --line:#27334D; --line-strong:#38466A;
+    --text:#E4E9F2; --muted:#9EA9BE; --faint:#7F8BA3;
+    --primary:#7BA5E8; --primary-ink:#A9C5F2; --primary-tint:#1D2C4B;
+    --nav:#0A111E; --nav-text:#A9B6CD; --nav-line:#1C2942; --nav-hover:#141F33;
+    --ok:#62C18F; --ok-tint:#173226; --warn:#E3A25A; --warn-tint:#37270F; --bad:#EE8A8A; --bad-tint:#3A1B1B; --neutral-tint:#1E283D;
+    --r-primary:#7BA5E8; --r-related:#A3AEC3; --r-testing:#5CC7C1; --r-safety:#E3A25A; --r-normative:#B4A3EA;
+    --mark:#5A4B12; --focus:#8DB4F5;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1524; --surface:#151E30; --surface-2:#1A2439; --line:#27334D; --line-strong:#38466A;
+  --text:#E4E9F2; --muted:#9EA9BE; --faint:#7F8BA3;
+  --primary:#7BA5E8; --primary-ink:#A9C5F2; --primary-tint:#1D2C4B;
+  --nav:#0A111E; --nav-text:#A9B6CD; --nav-line:#1C2942; --nav-hover:#141F33;
+  --ok:#62C18F; --ok-tint:#173226; --warn:#E3A25A; --warn-tint:#37270F; --bad:#EE8A8A; --bad-tint:#3A1B1B; --neutral-tint:#1E283D;
+  --r-primary:#7BA5E8; --r-related:#A3AEC3; --r-testing:#5CC7C1; --r-safety:#E3A25A; --r-normative:#B4A3EA;
+  --mark:#5A4B12; --focus:#8DB4F5;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(72px + env(safe-area-inset-top,0px));-webkit-text-size-adjust:100%}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font:400 14px/1.5 var(--font);font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:3px}
+.ic{width:16px;height:16px;flex:none;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.ic.lg{width:20px;height:20px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* shell */
+.app{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100vh}
+.side{background:var(--nav);color:var(--nav-text);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:20px 12px 16px}
+.brand{padding:2px 10px 18px;border-bottom:1px solid var(--nav-line);margin-bottom:12px}
+.brand b{display:block;font:600 21px/1.2 var(--serif);color:#fff;letter-spacing:.1px}
+.brand span{display:block;margin-top:6px;font-size:12px;line-height:1.4;color:var(--nav-text)}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{display:flex;align-items:center;gap:10px;background:none;border:0;color:var(--nav-text);text-align:left;padding:9px 10px;border-radius:4px;font-weight:500}
+.nav button:hover{background:var(--nav-hover);color:#fff}
+.nav button[aria-current="page"]{background:var(--nav-hover);color:#fff;box-shadow:inset 3px 0 0 #8FB3EA}
+.nav .badge{margin-left:auto;font-size:11px;background:#8FB3EA;color:#0E2245;border-radius:9px;padding:0 7px;font-weight:600}
+.side .kbnote{margin-top:auto;border-top:1px solid var(--nav-line);padding:12px 10px 0;font-size:12px;line-height:1.45}
+.side .kbnote b{color:#fff;font-weight:600;display:block;margin-bottom:2px}
+.main{min-width:0;display:flex;flex-direction:column}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 28px;min-height:56px}
+.top .title{font:600 17px/1.2 var(--serif);margin-right:auto}
+.top .title small{display:block;font:400 12px/1.3 var(--font);color:var(--muted);margin-top:2px}
+.sel{background:var(--surface);border:1px solid var(--line-strong);border-radius:4px;padding:6px 8px;min-height:34px}
+.chip-btn{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line-strong);border-radius:4px;padding:6px 10px;min-height:34px;color:var(--text)}
+.chip-btn:hover{background:var(--surface-2)}
+.session{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);padding-left:12px;border-left:1px solid var(--line)}
+.session .av{width:26px;height:26px;border-radius:50%;background:var(--primary-tint);color:var(--primary-ink);display:grid;place-items:center;font-weight:600;font-size:11px}
+.page{padding:24px 28px 48px;max-width:1360px;width:100%}
+.banner{display:flex;gap:10px;align-items:flex-start;background:var(--warn-tint);border:1px solid color-mix(in srgb,var(--warn) 30%,transparent);color:var(--text);border-radius:5px;padding:9px 12px;font-size:13px;margin-bottom:18px}
+.banner .ic{color:var(--warn);margin-top:2px}
+.banner.info{background:var(--primary-tint);border-color:color-mix(in srgb,var(--primary) 25%,transparent)}
+.banner.info .ic{color:var(--primary)}
+.banner.err{background:var(--bad-tint);border-color:color-mix(in srgb,var(--bad) 30%,transparent)}
+.banner.err .ic{color:var(--bad)}
+.banner p{flex:1}
+.pagehead{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.pagehead h2{font:600 22px/1.25 var(--serif)}
+.pagehead p{color:var(--muted);margin-top:3px;max-width:70ch}
+.pagehead .actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+
+/* components */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px}
+.card>header{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.card>header h3{font:600 14px/1.3 var(--font)}
+.card>header .meta{color:var(--muted);font-size:12px;margin-left:auto}
+.card>header .ic{color:var(--muted)}
+.card .body{padding:16px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:4px;border:1px solid var(--line-strong);background:var(--surface);padding:7px 13px;min-height:34px;font-weight:500;color:var(--text)}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn.primary:hover{background:var(--primary-ink)}
+:root[data-theme="dark"] .btn.primary{color:#0B1424}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.primary{color:#0B1424}}
+.btn.sm{min-height:28px;padding:3px 9px;font-size:12.5px}
+.btn.ok{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,var(--line))}
+.btn.ok:hover{background:var(--ok-tint)}
+.btn.no{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 40%,var(--line))}
+.btn.no:hover{background:var(--bad-tint)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.btn.link{border:0;background:none;color:var(--primary);padding:2px 4px;min-height:0}
+.btn.link:hover{text-decoration:underline;background:none}
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;line-height:1;padding:4px 7px;border-radius:3px;border:1px solid transparent;white-space:nowrap}
+.tag.Primary{color:var(--r-primary);background:color-mix(in srgb,var(--r-primary) 12%,transparent)}
+.tag.Related{color:var(--r-related);background:color-mix(in srgb,var(--r-related) 12%,transparent)}
+.tag.Testing{color:var(--r-testing);background:color-mix(in srgb,var(--r-testing) 12%,transparent)}
+.tag.Safety{color:var(--r-safety);background:color-mix(in srgb,var(--r-safety) 13%,transparent)}
+.tag.Normative{color:var(--r-normative);background:color-mix(in srgb,var(--r-normative) 12%,transparent)}
+.st{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;white-space:nowrap}
+.st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.st.ok{color:var(--ok)} .st.warn{color:var(--warn)} .st.bad{color:var(--bad)} .st.neutral{color:var(--faint)}
+.pill{display:inline-block;font-size:12px;padding:2px 8px;border-radius:10px;background:var(--neutral-tint);color:var(--muted)}
+.pill.demo{background:var(--warn-tint);color:var(--warn);font-weight:500}
+.muted{color:var(--muted)} .faint{color:var(--faint)} .small{font-size:12.5px}
+.isid{font-weight:600;color:var(--text)}
+mark{background:var(--mark);color:inherit;padding:0 1px;border-radius:2px}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:6px 14px;font-size:13px}
+.kv dt{color:var(--muted)} .kv dd{margin:0}
+.list{margin:0;padding:0;list-style:none}
+.list li{padding:8px 0;border-top:1px solid var(--line);display:flex;gap:10px;align-items:flex-start}
+.list li:first-child{border-top:0;padding-top:0}
+.empty{padding:26px 16px;text-align:center;color:var(--muted)}
+.empty h4{font:600 14px var(--font);color:var(--text);margin-bottom:4px}
+.empty .btn{margin-top:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line-strong);background:var(--surface);border-radius:14px;padding:3px 10px;font-size:12.5px}
+.chip.on{background:var(--primary);border-color:var(--primary);color:#fff}
+:root[data-theme="dark"] .chip.on{color:#0B1424}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .chip.on{color:#0B1424}}
+.chip.ent{border-radius:3px;background:var(--surface-2);border-color:var(--line)}
+button.chip:hover{background:var(--surface-2)} button.chip.on:hover{background:var(--primary-ink)}
+
+/* workflow strip */
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;counter-reset:s}
+.flow .fs{position:relative;padding:14px 14px 14px 16px;border-left:1px solid var(--line)}
+.flow .fs:first-child{border-left:0}
+.flow .fs .n{display:flex;align-items:center;gap:8px;font-weight:600}
+.flow .fs .dot{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line-strong);display:grid;place-items:center;color:#fff;flex:none}
+.flow .fs .dot .ic{width:11px;height:11px;stroke-width:2.5}
+.flow .fs.done .dot{background:var(--ok);border-color:var(--ok)}
+.flow .fs.run .dot{border-color:var(--primary);border-top-color:transparent;animation:spin .9s linear infinite}
+.flow .fs .s{color:var(--muted);font-size:12.5px;margin-top:4px;line-height:1.4}
+.flow .fs::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:transparent}
+.flow .fs.done::after{background:var(--ok)}
+.flow .fs.run::after{background:var(--primary)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.flow .fs.run .dot{animation:none}*{scroll-behavior:auto!important}}
+
+/* metric strip */
+.metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.metrics>div{padding:12px 16px;border-left:1px solid var(--line)}
+.metrics>div:first-child{border-left:0}
+.metrics b{display:block;font:600 22px/1.2 var(--font)}
+.metrics span{color:var(--muted);font-size:12.5px}
+
+/* standards rows */
+.shead,.srow{display:grid;grid-template-columns:150px minmax(0,1fr) 128px 92px 150px;gap:12px;align-items:center;padding:10px 16px}
+.shead{background:var(--surface-2);border-bottom:1px solid var(--line);color:var(--muted);font-size:12.5px;font-weight:500}
+.srow{border-top:1px solid var(--line);cursor:pointer;background:var(--surface)}
+.srow:first-of-type{border-top:0}
+.srow:hover{background:var(--surface-2)}
+.srow.sel{background:var(--primary-tint);box-shadow:inset 3px 0 0 var(--primary)}
+.srow .ttl{min-width:0}
+.srow .ttl b{font-weight:500;display:block}
+.srow .ttl small{color:var(--muted);display:flex;gap:6px;flex-wrap:wrap;margin-top:3px}
+.srow .acts{display:flex;gap:6px;justify-content:flex-end;align-items:center}
+.score{display:flex;align-items:center;gap:7px}
+.score i{display:block;width:44px;height:5px;background:var(--neutral-tint);border-radius:3px;overflow:hidden}
+.score i s{display:block;height:100%;background:var(--primary);text-decoration:none}
+.iconbtn{width:30px;height:30px;display:inline-grid;place-items:center;border:1px solid var(--line-strong);border-radius:4px;background:var(--surface);color:var(--muted)}
+.iconbtn:hover{background:var(--surface-2);color:var(--text)}
+.iconbtn.ok:hover{color:var(--ok);border-color:var(--ok)} .iconbtn.no:hover{color:var(--bad);border-color:var(--bad)}
+.iconbtn.ok.on{background:var(--ok);border-color:var(--ok);color:#fff} .iconbtn.no.on{background:var(--bad);border-color:var(--bad);color:#fff}
+.stdgrp{padding:9px 16px;background:var(--surface-2);border-top:1px solid var(--line);font-weight:600;font-size:12.5px;color:var(--muted)}
+
+/* layout with detail panel */
+.split{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:16px;align-items:start}
+.detail{position:sticky;top:calc(72px + env(safe-area-inset-top,0px));max-height:calc(100vh - 92px);overflow:auto}
+.detail .close{display:none}
+.backdrop{display:none}
+.section{scroll-margin-top:80px;margin-bottom:20px}
+.anchors{position:sticky;top:calc(56px + env(safe-area-inset-top,0px));z-index:10;background:var(--bg);padding:8px 0 10px;margin:-8px 0 8px;display:flex;gap:6px;flex-wrap:wrap}
+.anchors a{color:var(--text);text-decoration:none;border:1px solid var(--line-strong);background:var(--surface);border-radius:14px;padding:3px 11px;font-size:12.5px}
+.anchors a:hover{background:var(--surface-2)}
+
+/* tables */
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{background:var(--surface-2);text-align:left;font-weight:500;color:var(--muted);font-size:12.5px;padding:9px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 14px;border-top:1px solid var(--line);vertical-align:top}
+thead+tbody tr:first-child td{border-top:0}
+td.num,th.num{text-align:right}
+tbody tr.clickable{cursor:pointer} tbody tr.clickable:hover{background:var(--surface-2)}
+tbody tr.sel{background:var(--primary-tint)}
+
+/* form */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--line);padding:0 8px;overflow-x:auto}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:11px 12px;color:var(--muted);font-weight:500;white-space:nowrap;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--primary-ink);border-bottom-color:var(--primary)}
+textarea.spec{width:100%;min-height:190px;resize:vertical;border:1px solid var(--line-strong);border-radius:4px;background:var(--surface);padding:10px 12px;line-height:1.55}
+textarea.spec:focus{outline:2px solid var(--focus);outline-offset:0}
+.field{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--muted)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.drop{border:1.5px dashed var(--line-strong);border-radius:5px;padding:18px;display:flex;gap:12px;align-items:center;background:var(--surface-2)}
+.drop.over{border-color:var(--primary);background:var(--primary-tint)}
+.drop .ic{color:var(--muted)}
+.mic.rec{background:var(--bad);border-color:var(--bad);color:#fff}
+.mic.rec .ic{animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.4}}
+input.txt{border:1px solid var(--line-strong);border-radius:4px;padding:6px 9px;background:var(--surface);min-height:34px;width:100%}
+input.txt.r{text-align:right}
+
+/* pipeline */
+.pl{list-style:none;margin:0;padding:0}
+.pl li{display:grid;grid-template-columns:22px 1fr;gap:10px;padding:0 0 14px;position:relative}
+.pl li::before{content:"";position:absolute;left:10px;top:22px;bottom:0;width:1px;background:var(--line)}
+.pl li:last-child::before{display:none} .pl li:last-child{padding-bottom:0}
+.pl .d{width:21px;height:21px;border-radius:50%;border:1.5px solid var(--line-strong);background:var(--surface);display:grid;place-items:center;color:#fff}
+.pl .d .ic{width:12px;height:12px;stroke-width:2.5}
+.pl li.done .d{background:var(--ok);border-color:var(--ok)}
+.pl li.run .d{border-color:var(--primary);border-top-color:transparent;animation:spin .9s linear infinite}
+.pl b{font-weight:600} .pl .sum{color:var(--muted);font-size:12.5px}
+.pl ul{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:12.5px}
+.pl li.idle b{color:var(--muted);font-weight:500}
+
+/* dialog / toast */
+.modal{position:fixed;inset:0;background:var(--overlay);z-index:60;display:flex;justify-content:flex-end;padding-top:env(safe-area-inset-top,0px)}
+.modal .sheet{background:var(--surface);width:min(560px,100%);height:100%;overflow:auto;border-left:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.modal .sheet>header{position:sticky;top:0;background:var(--surface);z-index:1;display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.modal .sheet>header h3{font:600 17px var(--serif);margin-right:auto}
+.modal .sheet .body{padding:16px 18px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--nav);color:#fff;padding:10px 16px;border-radius:5px;z-index:80;font-size:13px;max-width:min(560px,92vw);box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.arch{display:grid;gap:0;margin-bottom:12px}
+.arch div{border:1px solid var(--line);padding:9px 12px;font-size:13px;background:var(--surface-2)}
+.arch div+div{border-top:0}
+.arch div b{font-weight:600} .arch div span{color:var(--muted);display:block;font-size:12.5px}
+.stack dt{font-weight:600;margin-top:12px} .stack dd{margin:2px 0 0;color:var(--muted);font-size:13px}
+.stack{margin:0}
+
+/* responsive */
+@media (max-width:1179px){
+  .split{grid-template-columns:minmax(0,1fr)}
+  .detail{position:fixed;z-index:50;top:0;right:0;bottom:0;width:min(460px,100%);max-height:none;transform:translateX(102%);visibility:hidden;border-radius:0;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  .detail.open{transform:none;visibility:visible;transition:transform .18s ease}
+  .detail .close{display:inline-grid}
+  .backdrop.open{display:block;position:fixed;inset:0;z-index:45;background:var(--overlay)}
+  .detail.hide-empty{display:none}
+}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;left:0;right:0;bottom:0;top:auto;height:auto;flex-direction:row;padding:4px 4px calc(4px + env(safe-area-inset-bottom,0px));z-index:40;border-top:1px solid var(--nav-line)}
+  .brand,.side .kbnote{display:none}
+  .nav{flex-direction:row;width:100%;justify-content:space-around}
+  .nav button{flex-direction:column;gap:3px;font-size:11px;padding:6px 4px;flex:1;text-align:center;min-width:0}
+  .nav button span.lbl{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav button[aria-current="page"]{box-shadow:inset 0 3px 0 #8FB3EA}
+  .nav .badge{display:none}
+  .main{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+  .top{padding:8px 14px}
+  .session .who{display:none}
+  .page{padding:16px 14px 32px}
+  .g2,.g3{grid-template-columns:1fr}
+  .flow{grid-template-columns:1fr}
+  .flow .fs{border-left:0;border-top:1px solid var(--line)} .flow .fs:first-child{border-top:0}
+  .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .metrics>div{border-left:0;border-top:1px solid var(--line)}
+  .metrics>div:nth-child(-n+2){border-top:0}
+  .metrics>div:nth-child(even){border-left:1px solid var(--line)}
+  .shead{display:none}
+  .srow{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"id acts" "ttl ttl" "ver score";row-gap:6px}
+  .srow .c-id{grid-area:id}.srow .ttl{grid-area:ttl}.srow .c-ver{grid-area:ver}.srow .c-score{grid-area:score;justify-self:end}.srow .acts{grid-area:acts}
+  .kv{grid-template-columns:1fr;gap:1px 0} .kv dt{margin-top:8px}
+  .top .sel{max-width:118px}
+}
+@media (max-width:560px){ .btn.hide-sm span{display:none} .top .title small{display:none} }
+
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+
+/* ===== kb.js ===== */
+/* ===== Standards Knowledge Base (demo data) =====
+   Kept separate from the engine so records, versions, amendments and
+   certification mappings can be updated without touching application code.
+   Every record here is SAMPLE data for the prototype. It is not verified
+   against BIS and is not a catalogue of Indian Standards. */
+const KB_META = {
+  name: 'ISpectra demo Standards Knowledge Base',
+  version: 'demo-0.1',
+  verification: 'demo',
+  notice: 'Sample records for the prototype. Not verified against BIS and not a complete catalogue of Indian Standards.'
+};
+
+const KB_STANDARDS = [
+  {
+    id: 'IS 8112', num: '8112', part: null, kind: 'product', category: 'Cement',
+    title: '43 Grade Ordinary Portland Cement — Specification',
+    version: '2013', history: [{ version: '1989', status: 'Superseded' }], amendments: [],
+    scope: 'Requirements for 43 grade ordinary Portland cement.',
+    keywords: ['cement', 'portland', 'ordinary', 'opc', 'hydraulic', 'binder', 'specification'],
+    phrases: ['portland cement', 'ordinary portland cement'],
+    grade: { family: 'opc', values: [43] }, item: '43 Grade OPC',
+    related: ['IS 269', 'IS 12269', 'IS 1489 (Part 1)', 'IS 456'],
+    normative: ['IS 4031', 'IS 4032'], tests: ['IS 4031', 'IS 4032'], safety: ['IS 7969', 'IS 4082'],
+    cert: [{ scheme: 'BIS', note: 'Product certification mapped to this standard.' }]
+  },
+  {
+    id: 'IS 269', num: '269', part: null, kind: 'product', category: 'Cement',
+    title: 'Ordinary Portland Cement — Specification',
+    version: '2015', history: [{ version: '1989', status: 'Superseded' }], amendments: [],
+    scope: 'Requirements for ordinary Portland cement of 33 grade.',
+    keywords: ['cement', 'portland', 'ordinary', 'opc', 'hydraulic', 'binder', 'specification'],
+    phrases: ['portland cement', 'ordinary portland cement'],
+    grade: { family: 'opc', values: [33] }, item: '33 Grade OPC',
+    related: ['IS 8112', 'IS 12269', 'IS 1489 (Part 1)', 'IS 456'],
+    normative: ['IS 4031', 'IS 4032'], tests: ['IS 4031', 'IS 4032'], safety: ['IS 7969', 'IS 4082'],
+    cert: [{ scheme: 'BIS', note: 'Product certification mapped to this standard.' }]
+  },
+  {
+    id: 'IS 12269', num: '12269', part: null, kind: 'product', category: 'Cement',
+    title: '53 Grade Ordinary Portland Cement — Specification',
+    version: '2013', history: [{ version: '1987', status: 'Superseded' }], amendments: [],
+    scope: 'Requirements for 53 grade ordinary Portland cement.',
+    keywords: ['cement', 'portland', 'ordinary', 'opc', 'hydraulic', 'binder', 'specification'],
+    phrases: ['portland cement', 'ordinary portland cement'],
+    grade: { family: 'opc', values: [53] }, item: '53 Grade OPC',
+    related: ['IS 8112', 'IS 269', 'IS 1489 (Part 1)', 'IS 456'],
+    normative: ['IS 4031', 'IS 4032'], tests: ['IS 4031', 'IS 4032'], safety: ['IS 7969', 'IS 4082'],
+    cert: [{ scheme: 'BIS', note: 'Product certification mapped to this standard.' }]
+  },
+  {
+    id: 'IS 1489 (Part 1)', num: '1489', part: '1', kind: 'product', category: 'Cement',
+    title: 'Portland Pozzolana Cement — Specification — Part 1: Fly Ash Based',
+    version: '2015', history: [{ version: '1991', status: 'Superseded' }], amendments: [],
+    scope: 'Requirements for Portland pozzolana cement containing fly ash.',
+    keywords: ['cement', 'portland', 'pozzolana', 'fly', 'ash', 'ppc', 'blended', 'specification'],
+    phrases: ['portland pozzolana cement', 'fly ash'],
+    grade: null, item: 'Portland Pozzolana Cement (fly ash based)',
+    related: ['IS 8112', 'IS 269', 'IS 12269', 'IS 456'],
+    normative: ['IS 4031', 'IS 4032'], tests: ['IS 4031', 'IS 4032'], safety: ['IS 7969', 'IS 4082'],
+    cert: [{ scheme: 'BIS', note: 'Product certification mapped to this standard.' }]
+  },
+  {
+    id: 'IS 4031', num: '4031', part: null, kind: 'test', category: 'Cement',
+    title: 'Methods of Physical Tests for Hydraulic Cement',
+    version: 'Multi-part', history: [], amendments: [],
+    scope: 'Test methods for the physical properties of hydraulic cement. Published in several parts; the version differs by part.',
+    keywords: ['physical', 'test', 'method', 'hydraulic', 'cement', 'fineness', 'setting', 'strength'],
+    phrases: [], grade: null, item: null,
+    related: [], normative: [], tests: [], safety: [], cert: []
+  },
+  {
+    id: 'IS 4032', num: '4032', part: null, kind: 'test', category: 'Cement',
+    title: 'Method of Chemical Analysis of Hydraulic Cement',
+    version: '1985', history: [], amendments: [],
+    scope: 'Chemical analysis method for hydraulic cement.',
+    keywords: ['chemical', 'analysis', 'method', 'hydraulic', 'cement'],
+    phrases: [], grade: null, item: null,
+    related: [], normative: [], tests: [], safety: [], cert: []
+  },
+  {
+    id: 'IS 1786', num: '1786', part: null, kind: 'product', category: 'Reinforcement steel',
+    title: 'High Strength Deformed Steel Bars and Wires for Concrete Reinforcement — Specification',
+    version: '2008', history: [{ version: '1985', status: 'Superseded' }],
+    amendments: [{ no: 1, note: 'Demo entry. Amendment text to be loaded from BIS data.' }],
+    scope: 'Requirements for high strength deformed steel bars and wires used to reinforce concrete.',
+    keywords: ['steel', 'bar', 'wire', 'deformed', 'reinforcement', 'concrete', 'tmt', 'rebar', 'thermo', 'mechanically', 'treated', 'specification'],
+    phrases: ['reinforcement bar', 'deformed bar', 'steel bar', 'thermo mechanically treated'],
+    grade: { family: 'fe', values: [415, 500, 550, 600] }, item: 'Reinforcement steel bars',
+    related: ['IS 456'], normative: ['IS 1608 (Part 1)'], tests: ['IS 1608 (Part 1)'], safety: ['IS 7969', 'IS 4082'],
+    cert: [{ scheme: 'BIS', note: 'Product certification mapped to this standard.' }]
+  },
+  {
+    id: 'IS 1608 (Part 1)', num: '1608', part: '1', kind: 'test', category: 'Reinforcement steel',
+    title: 'Metallic Materials — Tensile Testing — Part 1: Method of Test at Room Temperature',
+    version: '2022', history: [], amendments: [],
+    scope: 'Tensile test method for metallic materials at room temperature.',
+    keywords: ['metallic', 'tensile', 'testing', 'test', 'method', 'steel', 'bar'],
+    phrases: [], grade: null, item: null,
+    related: [], normative: [], tests: [], safety: [], cert: []
+  },
+  {
+    id: 'IS 383', num: '383', part: null, kind: 'product', category: 'Aggregates',
+    title: 'Coarse and Fine Aggregates for Concrete — Specification',
+    version: '2016', history: [{ version: '1970', status: 'Superseded' }], amendments: [],
+    scope: 'Requirements for coarse and fine aggregates used in concrete.',
+    keywords: ['aggregate', 'coarse', 'fine', 'sand', 'gravel', 'crushed', 'stone', 'concrete', 'specification'],
+    phrases: ['coarse aggregate', 'fine aggregate'],
+    grade: null, item: 'Coarse and fine aggregates',
+    related: ['IS 456', 'IS 10262', 'IS 4926'], normative: ['IS 2386'], tests: ['IS 2386'], safety: ['IS 4082'],
+    cert: []
+  },
+  {
+    id: 'IS 2386', num: '2386', part: null, kind: 'test', category: 'Aggregates',
+    title: 'Methods of Test for Aggregates for Concrete',
+    version: 'Multi-part', history: [], amendments: [],
+    scope: 'Test methods for aggregates used in concrete. Published in several parts; the version differs by part.',
+    keywords: ['test', 'method', 'aggregate', 'concrete', 'grading', 'sieve'],
+    phrases: [], grade: null, item: null,
+    related: [], normative: [], tests: [], safety: [], cert: []
+  },
+  {
+    id: 'IS 456', num: '456', part: null, kind: 'code', category: 'Concrete',
+    title: 'Plain and Reinforced Concrete — Code of Practice',
+    version: '2000', history: [{ version: '1978', status: 'Superseded' }],
+    amendments: [{ no: 1, note: 'Demo entry. Amendment text to be loaded from BIS data.' }],
+    scope: 'Code of practice for plain and reinforced concrete in general construction.',
+    keywords: ['concrete', 'plain', 'reinforced', 'rcc', 'code', 'practice', 'structural', 'construction', 'works', 'design'],
+    phrases: ['reinforced concrete', 'plain concrete', 'code of practice'],
+    grade: null, item: 'Concrete works',
+    related: ['IS 10262', 'IS 4926', 'IS 8112', 'IS 12269'], normative: ['IS 383', 'IS 1786'], tests: [], safety: ['IS 7969'],
+    cert: []
+  },
+  {
+    id: 'IS 10262', num: '10262', part: null, kind: 'code', category: 'Concrete',
+    title: 'Concrete Mix Proportioning — Guidelines',
+    version: '2019', history: [{ version: '2009', status: 'Superseded' }], amendments: [],
+    scope: 'Guidelines for proportioning concrete mixes.',
+    keywords: ['concrete', 'mix', 'proportioning', 'design', 'mixture', 'guideline', 'grade'],
+    phrases: ['concrete mix', 'mix design', 'mix proportioning'],
+    grade: null, item: 'Concrete mix design',
+    related: ['IS 456', 'IS 383', 'IS 8112'], normative: ['IS 456', 'IS 383'], tests: [], safety: [],
+    cert: []
+  },
+  {
+    id: 'IS 4926', num: '4926', part: null, kind: 'code', category: 'Concrete',
+    title: 'Ready-Mixed Concrete — Code of Practice',
+    version: '2003', history: [{ version: '1976', status: 'Superseded' }], amendments: [],
+    scope: 'Code of practice for ready-mixed concrete.',
+    keywords: ['ready', 'mix', 'concrete', 'rmc', 'code', 'practice', 'batching', 'transport'],
+    phrases: ['ready mix concrete', 'ready mixed concrete'],
+    grade: null, item: 'Ready-mixed concrete',
+    related: ['IS 456', 'IS 383', 'IS 10262'], normative: ['IS 456', 'IS 383'], tests: [], safety: ['IS 7969'],
+    cert: []
+  },
+  {
+    id: 'IS 1077', num: '1077', part: null, kind: 'product', category: 'Bricks',
+    title: 'Common Burnt Clay Building Bricks — Specification',
+    version: '1992', history: [{ version: '1986', status: 'Superseded' }], amendments: [],
+    scope: 'Requirements for common burnt clay bricks used in building construction.',
+    keywords: ['brick', 'burnt', 'clay', 'building', 'common', 'masonry', 'specification'],
+    phrases: ['burnt clay', 'clay brick', 'building brick'],
+    grade: null, item: 'Common burnt clay building bricks',
+    related: ['IS 2212'], normative: ['IS 3495'], tests: ['IS 3495'], safety: ['IS 7969', 'IS 4082'],
+    cert: []
+  },
+  {
+    id: 'IS 3495', num: '3495', part: null, kind: 'test', category: 'Bricks',
+    title: 'Methods of Tests of Burnt Clay Building Bricks',
+    version: '1992', history: [], amendments: [],
+    scope: 'Test methods for burnt clay building bricks. Published in several parts.',
+    keywords: ['test', 'method', 'brick', 'burnt', 'clay', 'building', 'compressive', 'strength', 'absorption'],
+    phrases: [], grade: null, item: null,
+    related: [], normative: [], tests: [], safety: [], cert: []
+  },
+  {
+    id: 'IS 2212', num: '2212', part: null, kind: 'code', category: 'Bricks',
+    title: 'Brickwork — Code of Practice',
+    version: '1991', history: [], amendments: [],
+    scope: 'Code of practice for brickwork.',
+    keywords: ['brickwork', 'brick', 'masonry', 'code', 'practice', 'wall', 'construction'],
+    phrases: ['brick masonry', 'code of practice'],
+    grade: null, item: 'Brickwork',
+    related: ['IS 1077', 'IS 3495'], normative: ['IS 1077'], tests: [], safety: ['IS 7969'],
+    cert: []
+  },
+  {
+    id: 'IS 7969', num: '7969', part: null, kind: 'safety', category: 'Safety',
+    title: 'Safety Code for Handling and Storage of Building Materials',
+    version: '1975', history: [], amendments: [],
+    scope: 'Safety code for handling and storage of building materials.',
+    keywords: ['safety', 'handling', 'storage', 'building', 'material'],
+    phrases: [], grade: null, item: null,
+    related: [], normative: [], tests: [], safety: [], cert: []
+  },
+  {
+    id: 'IS 4082', num: '4082', part: null, kind: 'safety', category: 'Safety',
+    title: 'Recommendations on Stacking and Storage of Construction Materials and Components at Site',
+    version: '1996', history: [{ version: '1977', status: 'Superseded' }], amendments: [],
+    scope: 'Recommendations for stacking and storing construction materials at site.',
+    keywords: ['stacking', 'storage', 'construction', 'material', 'component', 'site'],
+    phrases: [], grade: null, item: null,
+    related: [], normative: [], tests: [], safety: [], cert: []
+  }
+];
+
+
+/* ===== engine.js ===== */
+/* ===== ISpectra engine =====
+   Layers mirror the architecture: pre-processing & understanding, AI engine
+   (demo matcher), knowledge-base access, recommendation engine, verification.
+   Every function here is pure so it can be replaced by REST calls to a
+   backend service without changing the UI. */
+const Engine = (() => {
+  const ROLE_ORDER = ['Primary', 'Testing', 'Safety', 'Normative', 'Related'];
+  const REL_TO_ROLE = { tests: 'Testing', safety: 'Safety', normative: 'Normative', related: 'Related' };
+  const REL_TEXT = {
+    tests: 'Test method referenced by',
+    safety: 'Safety / technical standard referenced by',
+    normative: 'Normative reference of',
+    related: 'Related standard of'
+  };
+
+  const STOP = new Set(('a an the of and or for to in on at by with from as is are be been being this that these those it its into per ' +
+    'shall should must will would can may any all each such than then also not no nor only own same so too very just now ' +
+    'supply supplying supplied required requirement requirements need needs needed please provide providing including include ' +
+    'etc as per quantity total building construction work site material').split(' '));
+
+  const SYN_REPLACE = { mixed: 'mix', mixture: 'mix', mixing: 'mix', reinforcing: 'reinforcement', rod: 'bar', rmc: 'rmc' };
+  const SYN_EXPAND = {
+    opc: 'ordinary portland cement',
+    ppc: 'portland pozzolana cement fly ash',
+    tmt: 'thermo mechanically treated deformed steel reinforcement bar',
+    rebar: 'reinforcement steel bar deformed',
+    sariya: 'reinforcement steel bar',
+    rmc: 'ready mix concrete',
+    rcc: 'reinforced concrete',
+    gravel: 'coarse aggregate',
+    sand: 'fine aggregate',
+    stone: 'aggregate',
+    chip: 'aggregate',
+    brickwork: 'brick masonry'
+  };
+
+  /* ---- language detection & translation ---- */
+  const SCRIPTS = [
+    ['Hindi (Devanagari)', 'hi', /[\u0900-\u0963\u0966-\u097F]/g],
+    ['Bengali', 'bn', /[\u0980-\u09FF]/g],
+    ['Punjabi (Gurmukhi)', 'pa', /[\u0A00-\u0A7F]/g],
+    ['Gujarati', 'gu', /[\u0A80-\u0AFF]/g],
+    ['Odia', 'or', /[\u0B00-\u0B7F]/g],
+    ['Tamil', 'ta', /[\u0B80-\u0BFF]/g],
+    ['Telugu', 'te', /[\u0C00-\u0C7F]/g],
+    ['Kannada', 'kn', /[\u0C80-\u0CFF]/g],
+    ['Malayalam', 'ml', /[\u0D00-\u0D7F]/g]
+  ];
+
+  function detectLanguage(text, hint) {
+    const letters = (text.match(/[A-Za-z\u0900-\u0D7F]/g) || []).length || 1;
+    let best = { name: 'English', code: 'en', share: (text.match(/[A-Za-z]/g) || []).length / letters };
+    for (const [name, code, re] of SCRIPTS) {
+      const n = (text.match(re) || []).length;
+      if (n / letters > 0.25 && n / letters > best.share) best = { name, code, share: n / letters };
+    }
+    const supported = best.code === 'en' || best.code === 'hi';
+    let source = 'detected';
+    if (hint === 'en' || hint === 'hi') {
+      if (hint !== best.code && best.share < 0.6) { best = { name: hint === 'hi' ? 'Hindi (Devanagari)' : 'English', code: hint, share: best.share }; }
+      source = 'selected';
+    }
+    return { name: best.name, code: best.code, supported: best.code === 'en' || best.code === 'hi', share: Math.round(best.share * 100), source };
+  }
+
+  const HI_LEX_RAW = {
+    'सीमेंट': 'cement', 'सीमेन्ट': 'cement', 'ओपीसी': 'OPC', 'पीपीसी': 'PPC', 'ग्रेड': 'grade', 'स्टील': 'steel', 'इस्पात': 'steel',
+    'सरिया': 'reinforcement bar', 'सरिये': 'reinforcement bar', 'छड़': 'bar', 'छड़ें': 'bars', 'छड़ों': 'bars', 'बार': 'bar', 'तार': 'wire',
+    'टीएमटी': 'TMT', 'ईंट': 'brick', 'ईंटें': 'bricks', 'ईंटों': 'bricks', 'ईंटो': 'bricks', 'कंक्रीट': 'concrete', 'कंक्रिट': 'concrete',
+    'रेत': 'sand', 'बालू': 'sand', 'बजरी': 'gravel', 'गिट्टी': 'coarse aggregate', 'रोड़ी': 'coarse aggregate', 'रोड़ा': 'coarse aggregate',
+    'रेडी': 'ready', 'मिक्स': 'mixed', 'मिश्रित': 'mixed', 'आरएमसी': 'RMC', 'मिट्टी': 'clay', 'पक्की': 'burnt', 'पकी': 'burnt',
+    'आपूर्ति': 'supply', 'चाहिए': 'shall', 'चाहिये': 'shall', 'अनिवार्य': 'mandatory', 'मानक': 'standard', 'मानकों': 'standards',
+    'निर्माण': 'construction', 'भवन': 'building', 'इमारत': 'building', 'पानी': 'water', 'टन': 'tonnes', 'बोरी': 'bags', 'बोरे': 'bags',
+    'मजबूत': 'strong', 'मज़बूत': 'strong', 'तैयार': 'ready', 'का': '', 'की': '', 'के': '', 'को': '', 'में': 'in', 'और': 'and', 'भी': 'also',
+    'लिए': 'for', 'हमें': '', 'है': '', 'हैं': '', 'से': 'from', 'पर': 'on', 'एक': 'one', 'सभी': 'all', 'प्रमाणित': 'certified',
+    'विनिर्देश': 'specification', 'निविदा': 'tender', 'ठेका': 'contract', 'कार्य': 'works', 'दीवार': 'wall', 'चिनाई': 'brickwork',
+    'संपीड़न': 'compressive', 'शक्ति': 'strength', 'मीट्रिक': 'metric', 'घन': 'cubic', 'मीटर': 'metre', 'मिमी': 'mm'
+  };
+  const HI_LEX = {};
+  for (const k of Object.keys(HI_LEX_RAW)) HI_LEX[k.normalize('NFC')] = HI_LEX_RAW[k];
+
+  function translateHindi(text) {
+    const missing = [];
+    const digits = text.replace(/[\u0966-\u096F]/g, d => String(d.charCodeAt(0) - 0x0966));
+    const out = digits.replace(/\u0964/g, '. ').replace(/[\u0900-\u0963\u0966-\u097F]+/g, w => {
+      const key = w.normalize('NFC');
+      if (Object.prototype.hasOwnProperty.call(HI_LEX, key)) return HI_LEX[key];
+      missing.push(w);
+      return w;
+    });
+    return { text: out.replace(/\s+/g, ' ').trim(), untranslated: Array.from(new Set(missing)) };
+  }
+
+  /* ---- cleaning / normalisation ---- */
+  function cleanText(raw) {
+    return String(raw || '')
+      .normalize('NFC')
+      .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u200B-\u200D\uFEFF]/g, '')
+      .replace(/(\w)-\n(\w)/g, '$1$2')
+      .replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"').replace(/[\u2013\u2014]/g, '-')
+      .replace(/\r/g, '')
+      .replace(/[ \t]+/g, ' ')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
+
+  function sentences(text) {
+    return text.split(/(?<=[.!?;])\s+|\n+/).map(s => s.trim()).filter(s => s.length > 3);
+  }
+
+  /* ---- tokens ---- */
+  function stem(w) {
+    if (SYN_REPLACE[w]) return SYN_REPLACE[w];
+    if (w.length > 4 && w.endsWith('ies')) return w.slice(0, -3) + 'y';
+    if (w.length > 3 && w.endsWith('s') && !w.endsWith('ss') && !w.endsWith('us') && !w.endsWith('is')) return w.slice(0, -1);
+    return w;
+  }
+  function tokenize(text) {
+    return (String(text).toLowerCase().match(/[a-z0-9]+/g) || []).map(stem)
+      .filter(t => t.length > 1 && !STOP.has(t) && !/^\d+$/.test(t));
+  }
+  function expandTokens(tokens) {
+    const out = new Set(); const expansions = [];
+    for (const t of tokens) {
+      out.add(t);
+      if (SYN_EXPAND[t]) {
+        const add = tokenize(SYN_EXPAND[t]);
+        add.forEach(a => out.add(a));
+        expansions.push(t + ' → ' + SYN_EXPAND[t]);
+      }
+    }
+    return { set: out, expansions };
+  }
+
+  /* ---- entity extraction ---- */
+  const PRODUCT_LEX = [
+    ['Cement', /\b(cement|opc|ppc)\b/i],
+    ['Reinforcement steel bars', /\b(tmt|rebars?|sariya|reinforcement\s+(?:steel\s+)?bars?|deformed\s+(?:steel\s+)?bars?|steel\s+bars?|steel\s+rods?)\b/i],
+    ['Aggregates', /\b(aggregates?|gravel|crushed\s+stone|sand)\b/i],
+    ['Concrete', /\b(concrete|rmc|rcc)\b/i],
+    ['Bricks', /\bbricks?\b/i]
+  ];
+  const CITE_RE = /\bIS\b[\s.:-]*(\d{2,5})(?:\s*\(?\s*(?:Part|Pt)\.?\s*(\d+)\s*\)?)?(?:\s*(?:[:\-\/]\s*|\(\s*)((?:19|20)\d{2})\)?)?/g;
+
+  function extractCitations(text) {
+    const out = []; const seen = new Set(); let m;
+    CITE_RE.lastIndex = 0;
+    while ((m = CITE_RE.exec(text))) {
+      const rec = { raw: m[0].replace(/\s+/g, ' ').trim(), num: m[1], part: m[2] || null, year: m[3] || null };
+      const key = rec.num + '|' + (rec.part || '') + '|' + (rec.year || '');
+      if (!seen.has(key)) { seen.add(key); out.push(rec); }
+    }
+    return out;
+  }
+
+  function uniq(a) { return Array.from(new Set(a)); }
+
+  function extractEntities(text) {
+    const products = PRODUCT_LEX.filter(([, re]) => re.test(text)).map(([n]) => n);
+    const attrs = [];
+    let m;
+    const g1 = /\b(33|43|53)\s*[- ]?grade\b|\bgrade\s*[- ]?(33|43|53)\b/gi;
+    while ((m = g1.exec(text))) attrs.push({ type: 'Cement grade', value: (m[1] || m[2]) + ' grade' });
+    const fe = /\bFe\s*[- ]?(415|500|550|600)\s*(D|S|CRS)?\b/gi;
+    while ((m = fe.exec(text))) attrs.push({ type: 'Steel grade', value: 'Fe ' + m[1] + (m[2] ? m[2].toUpperCase() : '') });
+    const mg = /\bM\s?-?(10|15|20|25|30|35|40|45|50)\b/g;
+    while ((m = mg.exec(text))) attrs.push({ type: 'Concrete grade', value: 'M' + m[1] });
+    const st = /(\d+(?:\.\d+)?)\s*(MPa|N\/mm2|N\/mm²)/gi;
+    while ((m = st.exec(text))) attrs.push({ type: 'Strength', value: m[1] + ' ' + m[2] });
+    const dia = /(\d+(?:\.\d+)?)\s*mm\b/gi;
+    while ((m = dia.exec(text))) attrs.push({ type: 'Dimension', value: m[1] + ' mm' });
+    const q = /(\d[\d,]*(?:\.\d+)?)\s*(tonnes?|tons?|MT|kg|bags?|nos\.?|numbers?|cubic\s*met(?:er|re)s?|cum|m3|m³|bricks?)\b/gi;
+    while ((m = q.exec(text))) attrs.push({ type: 'Quantity', value: m[1] + ' ' + m[2].toLowerCase() });
+    const seen = new Set();
+    const attributes = attrs.filter(a => { const k = a.type + a.value.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; });
+    const reqRe = /\b(shall|must|should|required|requirement|conform(?:s|ing)?|compl(?:y|ies|iance)|in accordance|as per|mandatory|necessary|minimum|not less than|at least)\b/i;
+    const requirements = sentences(text).filter(s => reqRe.test(s)).slice(0, 8).map(s => s.length > 240 ? s.slice(0, 237) + '...' : s);
+    return { products, attributes, requirements, standards: extractCitations(text) };
+  }
+
+  function detectIntent(text, products) {
+    const works = /\b(construction|works?|laying|execution|erection|casting|building)\b/i.test(text);
+    const purchase = /\b(supply|procure|procurement|purchase|tender|quotation|delivery|supplying)\b/i.test(text);
+    const what = products.length ? products.join(', ').toLowerCase() : 'unidentified items';
+    if (purchase && works) return 'Supply of materials for construction works: ' + what;
+    if (purchase) return 'Procurement of ' + what;
+    if (works) return 'Construction works involving ' + what;
+    return 'Requirement involving ' + what;
+  }
+
+  /* ---- knowledge base access ---- */
+  function indexKB(standards) {
+    const byId = new Map(); const byNum = new Map();
+    for (const s of standards) {
+      byId.set(s.id, s);
+      if (!byNum.has(s.num)) byNum.set(s.num, []);
+      byNum.get(s.num).push(s);
+    }
+    const docs = standards.map(s => {
+      const terms = new Map();
+      const add = (arr, w) => arr.forEach(t => terms.set(t, Math.max(terms.get(t) || 0, w)));
+      add(tokenize(s.title), 1.4); add((s.keywords || []).flatMap(k => tokenize(k)), 1.0); add(tokenize(s.scope || ''), 0.4);
+      return { id: s.id, terms };
+    });
+    const df = new Map();
+    docs.forEach(d => d.terms.forEach((_, t) => df.set(t, (df.get(t) || 0) + 1)));
+    const N = docs.length || 1; const idf = new Map();
+    df.forEach((c, t) => idf.set(t, Math.log(1 + N / c)));
+    const usedBy = new Map();
+    for (const s of standards) for (const rel of ['tests', 'safety', 'normative', 'related']) for (const r of s[rel] || []) {
+      if (!usedBy.has(r)) usedBy.set(r, []);
+      usedBy.get(r).push({ id: s.id, rel });
+    }
+    const unresolved = [];
+    for (const s of standards) for (const rel of ['tests', 'safety', 'normative', 'related']) for (const r of s[rel] || []) if (!byId.has(r)) unresolved.push({ from: s.id, ref: r, rel });
+    return { list: standards, byId, byNum, docs: new Map(docs.map(d => [d.id, d])), idf, usedBy, unresolved };
+  }
+
+  function latestYear(std) { const m = /(\d{4})/.exec(std.version || ''); return m ? m[1] : null; }
+
+  function lookupCitation(kb, c) {
+    const list = kb.byNum.get(c.num) || [];
+    if (!list.length) return null;
+    if (c.part) return list.find(s => String(s.part) === String(c.part)) || null;
+    return list.find(s => !s.part) || (list.length === 1 ? list[0] : list[0]);
+  }
+
+  function verifyCitation(kb, c) {
+    const std = lookupCitation(kb, c);
+    if (!std) return { ...c, kbId: null, status: 'unknown', latest: null, note: 'Not in the demo Knowledge Base, so it cannot be verified.' };
+    const latest = std.version;
+    const ly = latestYear(std);
+    if (/multi/i.test(latest)) return { ...c, kbId: std.id, status: 'multipart', latest, note: 'Multi-part standard. Confirm the part and its year.' };
+    if (!c.year) return { ...c, kbId: std.id, status: 'noyear', latest, note: 'Year not stated. Latest version in the Knowledge Base is ' + latest + '.' };
+    if (c.year === ly) return { ...c, kbId: std.id, status: 'current', latest, note: 'Matches the latest version.' };
+    const old = (std.history || []).find(h => h.version === c.year);
+    if (old) return { ...c, kbId: std.id, status: 'outdated', latest, note: 'Version ' + c.year + ' is superseded. Latest is ' + latest + '.' };
+    return { ...c, kbId: std.id, status: 'mismatch', latest, note: 'Year ' + c.year + ' is not a known version. Latest is ' + latest + '.' };
+  }
+
+  /* ---- AI engine: demo semantic matcher ---- */
+  const K = 5;
+  function scoreStandard(kb, std, qset, qtext, attrs) {
+    const doc = kb.docs.get(std.id);
+    let raw = 0; const matched = [];
+    doc.terms.forEach((w, t) => { if (qset.has(t)) { raw += w * (kb.idf.get(t) || 0); matched.push(t); } });
+    const phrases = (std.phrases || []).filter(p => qtext.includes(p));
+    raw += phrases.length * 2.0;
+    const notes = [];
+    if (std.grade && raw > 0) {
+      const fam = std.grade.family;
+      const stated = attrs.filter(a => (fam === 'opc' && a.type === 'Cement grade') || (fam === 'fe' && a.type === 'Steel grade'))
+        .map(a => parseInt(a.value.replace(/\D/g, '').slice(0, 3), 10));
+      if (stated.length) {
+        if (stated.some(v => std.grade.values.includes(v))) { raw += 4; notes.push({ kind: 'attr-match', text: (fam === 'opc' ? 'Stated cement grade ' : 'Stated steel grade Fe ') + stated.join(', ') + ' falls within this standard.' }); }
+        else { raw *= 0.25; notes.push({ kind: 'attr-miss', text: 'Input states grade ' + stated.join(', ') + ', which this standard does not cover.' }); }
+      }
+    }
+    const sem = 1 - Math.exp(-raw / K);
+    return { sem, raw, matched, phrases, notes };
+  }
+
+  function segments(sentence, termSet) {
+    const parts = sentence.split(/([A-Za-z0-9]+)/); const out = [];
+    for (const p of parts) {
+      if (!p) continue;
+      const isWord = /^[A-Za-z0-9]+$/.test(p);
+      const hit = isWord && (termSet.has(stem(p.toLowerCase())) || termSet.has(p.toLowerCase()));
+      out.push({ t: p, m: !!hit });
+    }
+    const merged = [];
+    for (const s of out) { const l = merged[merged.length - 1]; if (l && l.m === s.m) l.t += s.t; else merged.push({ ...s }); }
+    return merged;
+  }
+
+  function analyse(kb, input) {
+    const stages = [];
+    const raw = String(input.text || '');
+    const type = input.type || 'product';
+    const typeLabel = { product: 'Product description', spec: 'Technical specification', tender: 'Tender document' }[type] || 'Product description';
+
+    // 1 Input
+    stages.push({ key: 'input', label: 'Input', summary: typeLabel + ' · ' + raw.length.toLocaleString('en-IN') + ' characters',
+      details: [typeLabel, input.fileName ? 'File: ' + input.fileName : 'Typed, pasted or spoken text', 'Input language setting: ' + ({ auto: 'Auto-detect', en: 'English', hi: 'Hindi' }[input.langHint || 'auto'])] });
+
+    // 2 Pre-processing
+    const cleaned = cleanText(raw);
+    const lang = detectLanguage(cleaned, input.langHint || 'auto');
+    let translated = cleaned; let untranslated = []; let didTranslate = false;
+    if (lang.code === 'hi') { const tr = translateHindi(cleaned); translated = tr.text; untranslated = tr.untranslated; didTranslate = true; }
+    const entities = extractEntities(translated);
+    const parse = input.parseMethod || 'Plain text';
+    const pre = [
+      'Document parsing: ' + parse,
+      'OCR: not run in this prototype' + (input.parseMethod && /PDF/.test(input.parseMethod) ? ' (text layer used)' : ''),
+      'Text cleaned and normalised',
+      'Language: ' + lang.name + ' (' + lang.source + ')',
+      didTranslate ? 'Translation to English: demo term lexicon' + (untranslated.length ? ', ' + untranslated.length + ' term(s) left untranslated' : '') : (lang.supported ? 'Translation: not needed' : 'Translation: no translator for ' + lang.name + ' in this prototype'),
+      'Entities: ' + entities.products.length + ' product, ' + entities.attributes.length + ' attribute, ' + entities.requirements.length + ' requirement, ' + entities.standards.length + ' standard reference'
+    ];
+    stages.push({ key: 'pre', label: 'Pre-processing & understanding', summary: lang.name + ' · ' + (entities.products.length + entities.attributes.length + entities.requirements.length + entities.standards.length) + ' entities', details: pre });
+
+    // 3 AI analysis
+    const toks = tokenize(translated);
+    const ex = expandTokens(toks);
+    const intent = detectIntent(translated, entities.products);
+    stages.push({ key: 'ai', label: 'AI analysis', summary: intent,
+      details: ['Context and intent: ' + intent, ex.set.size + ' distinct concepts after normalisation', ex.expansions.length ? 'Concept expansion: ' + ex.expansions.join('; ') : 'No abbreviations expanded', 'Demo matcher stands in for LLM embeddings and pgvector search'] });
+
+    // 4 Standards matching
+    const qtext = translated.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ');
+    const qtextStem = ' ' + Array.from(ex.set).join(' ') + ' ' + qtext + ' ';
+    const scored = kb.list.filter(s => s.kind === 'product' || s.kind === 'code')
+      .map(s => ({ std: s, ...scoreStandard(kb, s, ex.set, qtextStem, entities.attributes) }))
+      .filter(r => r.raw > 0 && r.matched.length > 0)
+      .sort((a, b) => b.sem - a.sem);
+    const top = scored.length ? scored[0].sem : 0;
+    const primaries = scored.filter(r => r.sem >= 0.30 && r.sem >= top * 0.65 && (r.phrases.length > 0 || r.matched.length >= 2 || r.raw >= 1.5)).slice(0, 5);
+
+    const recs = new Map();
+    const sentList = sentences(translated);
+    for (const p of primaries) {
+      const termSet = new Set(p.matched);
+      const ev = sentList.map(s => ({ s, n: tokenize(s).filter(t => termSet.has(t)).length })).filter(x => x.n > 0)
+        .sort((a, b) => b.n - a.n).slice(0, 2).map(x => segments(x.s, termSet));
+      const reasons = [];
+      const named = uniq(p.phrases.concat(p.matched.slice(0, 4)));
+      reasons.push({ kind: 'semantic', text: 'The input describes ' + named.slice(0, 4).join(', ') + ', which matches the title and scope of ' + p.std.id + '.' });
+      p.notes.forEach(n => reasons.push(n));
+      recs.set(p.std.id, { id: p.std.id, roles: ['Primary'], score: p.sem, matched: p.matched, phrases: p.phrases, reasons, evidence: ev, paths: [], advisory: null });
+    }
+    // grade advisory
+    const opcPrim = primaries.filter(p => p.std.grade && p.std.grade.family === 'opc');
+    if (opcPrim.length > 1 && !entities.attributes.some(a => a.type === 'Cement grade')) {
+      opcPrim.forEach(p => { recs.get(p.std.id).advisory = 'The input does not state a cement grade, so more than one grade-specific standard is listed. Confirm the grade before approving.'; });
+    }
+    stages.push({ key: 'match', label: 'Standards matching', summary: primaries.length + ' matched from ' + kb.list.filter(s => s.kind === 'product' || s.kind === 'code').length + ' candidates',
+      details: [scored.length + ' candidate standard(s) with overlapping concepts', primaries.length + ' above the match threshold', primaries.length ? 'Top match: ' + primaries[0].std.id + ' (' + Math.round(primaries[0].sem * 100) + '%)' : 'No standard in the demo Knowledge Base matched this input'] });
+
+    // 5 Recommendation (graph expansion, rank & filter, certifications)
+    for (const p of primaries) {
+      for (const rel of ['tests', 'safety', 'normative', 'related']) {
+        for (const rid of p.std[rel] || []) {
+          if (!kb.byId.has(rid)) continue;
+          const role = REL_TO_ROLE[rel];
+          let r = recs.get(rid);
+          if (!r) { r = { id: rid, roles: [], score: null, matched: [], phrases: [], reasons: [], evidence: [], paths: [], advisory: null }; recs.set(rid, r); }
+          if (!r.roles.includes(role)) r.roles.push(role);
+          r.paths.push({ from: p.std.id, rel, text: REL_TEXT[rel] + ' ' + p.std.id });
+        }
+      }
+    }
+    recs.forEach(r => { r.roles.sort((a, b) => ROLE_ORDER.indexOf(a) - ROLE_ORDER.indexOf(b)); });
+    const recList = Array.from(recs.values()).sort((a, b) => {
+      const pa = a.roles[0] === 'Primary' ? 0 : 1, pb = b.roles[0] === 'Primary' ? 0 : 1;
+      if (pa !== pb) return pa - pb;
+      if (pa === 0) return (b.score || 0) - (a.score || 0);
+      const ra = ROLE_ORDER.indexOf(a.roles[0]), rb = ROLE_ORDER.indexOf(b.roles[0]);
+      if (ra !== rb) return ra - rb;
+      if (b.paths.length !== a.paths.length) return b.paths.length - a.paths.length;
+      return a.id.localeCompare(b.id, 'en', { numeric: true });
+    });
+
+    const certs = [];
+    for (const r of recList) { const s = kb.byId.get(r.id); (s.cert || []).forEach(c => certs.push({ scheme: c.scheme, standard: s.id, note: c.note, item: s.item, title: s.title })); }
+    stages.push({ key: 'rec', label: 'Recommendation', summary: recList.length + ' standards · ' + certs.length + ' certification mapping(s)',
+      details: [recList.filter(r => r.roles[0] === 'Primary').length + ' recommended, ' + recList.filter(r => r.roles[0] !== 'Primary').length + ' allied, related or normative',
+        'Ranked by match score, then by relationship type', certs.length + ' certification requirement(s) suggested from the Knowledge Base', 'Structured output generated with reasons and references'] });
+
+    // 6 Verification
+    const cited = entities.standards.map(c => verifyCitation(kb, c));
+    const citedKeys = new Set(cited.filter(c => c.kbId).map(c => c.kbId));
+    const citedNums = new Set(entities.standards.map(c => c.num));
+    const missing = recList.filter(r => r.roles.some(x => x !== 'Related') && !citedKeys.has(r.id) && !citedNums.has(kb.byId.get(r.id).num)).map(r => r.id);
+    const attention = cited.filter(c => c.status !== 'current').length;
+    let total = 0, resolved = 0;
+    for (const r of recList) { const s = kb.byId.get(r.id); for (const rel of ['tests', 'safety', 'normative', 'related']) for (const x of s[rel] || []) { total++; if (kb.byId.has(x)) resolved++; } }
+    stages.push({ key: 'verify', label: 'Verification', summary: cited.length + ' cited · ' + attention + ' need attention · ' + missing.length + ' missing',
+      details: [cited.length + ' standard reference(s) found in the input and checked against the Knowledge Base',
+        cited.filter(c => c.status === 'outdated').length + ' outdated, ' + cited.filter(c => c.status === 'unknown').length + ' not in the Knowledge Base',
+        missing.length + ' recommended standard(s) not referenced in the input', 'Cross-references resolved: ' + resolved + ' of ' + total] });
+
+    return {
+      id: 'A-' + Date.now().toString(36).toUpperCase(),
+      createdAt: new Date().toISOString(),
+      input: { type, typeLabel, fileName: input.fileName || '', chars: raw.length, langHint: input.langHint || 'auto', parseMethod: input.parseMethod || 'Plain text' },
+      text: { raw, cleaned, translated }, lang, didTranslate, untranslated, entities, intent,
+      expansions: ex.expansions, stages, recs: recList, cited, missing, certs, crossRef: { resolved, total },
+      kbVersion: input.kbVersion || ''
+    };
+  }
+
+  function validateKBUpdate(json) {
+    if (!json || !Array.isArray(json.standards)) return { ok: false, error: 'The file needs a "standards" array.' };
+    const need = ['id', 'num', 'title', 'kind', 'version'];
+    for (let i = 0; i < json.standards.length; i++) {
+      const s = json.standards[i];
+      const miss = need.filter(k => s[k] === undefined || s[k] === null || s[k] === '');
+      if (miss.length) return { ok: false, error: 'Record ' + (i + 1) + ' is missing: ' + miss.join(', ') + '.' };
+      if (!['product', 'code', 'test', 'safety'].includes(s.kind)) return { ok: false, error: 'Record ' + s.id + ' has an unknown kind "' + s.kind + '".' };
+    }
+    return { ok: true };
+  }
+
+  function normaliseRecord(s) {
+    return Object.assign({ part: null, category: 'Uncategorised', history: [], amendments: [], scope: '', keywords: [], phrases: [], grade: null, item: null,
+      related: [], normative: [], tests: [], safety: [], cert: [] }, s);
+  }
+
+  const api = { ROLE_ORDER, REL_TEXT, analyse, indexKB, validateKBUpdate, normaliseRecord, detectLanguage, translateHindi, extractCitations, verifyCitation, tokenize, cleanText };
+  if (typeof module !== 'undefined') module.exports = api;
+  return api;
+})();
+
+
+/* ===== i18n.js ===== */
+/* ===== Multilingual UI =====
+   English is the source text. Additional languages are dictionaries keyed by the
+   English string; anything missing falls back to English. */
+const I18N = {
+  hi: {
+    'Dashboard': 'डैशबोर्ड', 'Input / Analysis': 'इनपुट / विश्लेषण', 'Standards': 'मानक', 'Recommendations': 'अनुशंसाएँ', 'Reports': 'रिपोर्ट',
+    'AI-powered procurement standards intelligence': 'एआई-संचालित क्रय मानक इंटेलिजेंस',
+    'Demo Knowledge Base': 'डेमो नॉलेज बेस', 'Sample data. Not verified against BIS.': 'नमूना डेटा। BIS से सत्यापित नहीं।',
+    'Architecture': 'आर्किटेक्चर', 'Procurement Officer': 'क्रय अधिकारी', 'Demo session': 'डेमो सत्र',
+    'Product description': 'उत्पाद विवरण', 'Technical specification': 'तकनीकी विनिर्देश', 'Tender document': 'निविदा दस्तावेज़',
+    'Analyse specification': 'विनिर्देश का विश्लेषण करें', 'Voice input': 'वॉयस इनपुट', 'Stop recording': 'रिकॉर्डिंग रोकें',
+    'Input language': 'इनपुट भाषा', 'Auto-detect': 'स्वतः पहचान', 'English': 'अंग्रेज़ी', 'Hindi': 'हिन्दी',
+    'Load sample input': 'नमूना इनपुट लोड करें', 'Upload PDF, DOCX or TXT': 'PDF, DOCX या TXT अपलोड करें', 'Choose file': 'फ़ाइल चुनें',
+    'Clear': 'साफ़ करें', 'Start analysis': 'विश्लेषण शुरू करें', 'View recommendations': 'अनुशंसाएँ देखें',
+    'Processing pipeline': 'प्रोसेसिंग पाइपलाइन', 'Input': 'इनपुट', 'Analyse': 'विश्लेषण', 'Match': 'मिलान', 'Recommend': 'अनुशंसा', 'Verify': 'सत्यापन',
+    'Pre-processing': 'प्री-प्रोसेसिंग', 'AI analysis': 'एआई विश्लेषण', 'Standards matching': 'मानक मिलान', 'Recommendation': 'अनुशंसा', 'Verification': 'सत्यापन',
+    'Recommended Indian Standards': 'अनुशंसित भारतीय मानक', 'Allied / normative and related standards': 'संबद्ध / नॉर्मेटिव एवं संबंधित मानक',
+    'Allied / normative standards': 'संबद्ध / नॉर्मेटिव मानक', 'Certification requirements': 'प्रमाणन आवश्यकताएँ', 'Latest versions': 'नवीनतम संस्करण',
+    'Version check': 'संस्करण जाँच', 'Amendments': 'संशोधन', 'Explanation': 'स्पष्टीकरण', 'Cost analysis': 'लागत विश्लेषण', 'Export report': 'रिपोर्ट निर्यात करें',
+    'Approve': 'स्वीकृत करें', 'Reject': 'अस्वीकार करें', 'Pending': 'लंबित', 'Approved': 'स्वीकृत', 'Rejected': 'अस्वीकृत', 'Approve all pending': 'सभी लंबित स्वीकृत करें',
+    'Primary': 'मुख्य', 'Related': 'संबंधित', 'Testing': 'परीक्षण', 'Safety': 'सुरक्षा', 'Normative': 'नॉर्मेटिव', 'All': 'सभी',
+    'Current': 'वर्तमान', 'Outdated': 'पुराना', 'Missing': 'अनुपलब्ध', 'Why this was recommended': 'यह अनुशंसा क्यों की गई',
+    'Search standards': 'मानक खोजें', 'Standards Knowledge Base': 'मानक नॉलेज बेस', 'Version': 'संस्करण', 'Related standards': 'संबंधित मानक', 'Normative references': 'नॉर्मेटिव संदर्भ',
+    'Test methods': 'परीक्षण विधियाँ', 'Certification mapping': 'प्रमाणन मैपिंग', 'Generate report': 'रिपोर्ट बनाएँ', 'Download PDF': 'PDF डाउनलोड करें', 'Download Excel': 'Excel डाउनलोड करें',
+    'Language': 'भाषा', 'Demo data. Not verified against BIS.': 'डेमो डेटा। BIS से सत्यापित नहीं।',
+    "Don't search. Specify. We'll find the standard.": 'खोजिए नहीं, बताइए। मानक हम ढूँढेंगे।',
+    'Standards cited in the input': 'इनपुट में उद्धृत मानक', 'Not started': 'शुरू नहीं हुआ', 'Officer remarks': 'अधिकारी की टिप्पणी', 'Close': 'बंद करें',
+    'Procurement input': 'क्रय इनपुट', 'Recommended standards': 'अनुशंसित मानक', 'Reports': 'रिपोर्ट', 'Match score': 'मिलान स्कोर', 'Status': 'स्थिति', 'Title': 'शीर्षक',
+    'Quantity': 'मात्रा', 'Unit rate': 'इकाई दर', 'Amount': 'राशि', 'Total': 'कुल', 'Update Knowledge Base': 'नॉलेज बेस अपडेट करें', 'Download Knowledge Base': 'नॉलेज बेस डाउनलोड करें'
+  }
+};
+let LANG = 'en';
+function t(s) { const d = I18N[LANG]; return (d && d[s]) || s; }
+
+
+/* ===== reports.js ===== */
+/* ===== Report generation (PDF / Excel) =====
+   Libraries are loaded on demand from cdnjs. */
+const Reports = (() => {
+  const LIBS = {
+    xlsx: 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+    jspdf: 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+    autotable: 'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js'
+  };
+  const cache = {};
+  function load(src) {
+    if (!cache[src]) cache[src] = new Promise((res, rej) => {
+      const s = document.createElement('script'); s.src = src; s.onload = () => res();
+      s.onerror = () => { delete cache[src]; rej(new Error('Could not load ' + src)); };
+      document.head.appendChild(s);
+    });
+    return cache[src];
+  }
+
+  const DEMO_NOTICE = 'Generated from the demo Standards Knowledge Base. Records are sample data and are not verified against BIS.';
+
+  function tableData(ctx) {
+    const { analysis: a, kb, approvals, opts } = ctx;
+    const use = r => opts.scope !== 'approved' || (approvals[r.id] && approvals[r.id].status === 'approved');
+    const stat = id => { const x = approvals[id]; return x && x.status === 'approved' ? 'Approved' : x && x.status === 'rejected' ? 'Rejected' : 'Pending review'; };
+    const remark = id => (approvals[id] && approvals[id].note) || '';
+    const row = r => { const s = kb.byId.get(r.id); return { r, s, cells: [s.id, s.title, s.version, r.roles.join(', '), r.score == null ? '' : Math.round(r.score * 100) + '%', stat(r.id), remark(r.id)] }; };
+    const prim = a.recs.filter(r => r.roles[0] === 'Primary' && use(r)).map(row);
+    const supp = a.recs.filter(r => r.roles[0] !== 'Primary' && use(r)).map(row);
+    const stdHead = ['Standard', 'Title', 'Latest version (KB)', 'Relationship', 'Match', 'Officer review', 'Officer remarks'];
+    const cited = a.cited.map(c => [c.raw, c.kbId || '', c.latest || '', ({ current: 'Current', outdated: 'Outdated', unknown: 'Not in Knowledge Base', noyear: 'Year not stated', multipart: 'Multi-part', mismatch: 'Unknown year' })[c.status], c.note]);
+    const missing = a.missing.map(id => [id, kb.byId.get(id).title, kb.byId.get(id).version]);
+    const certs = a.certs.filter(c => opts.scope !== 'approved' || (approvals[c.standard] && approvals[c.standard].status === 'approved')).map(c => [c.scheme, c.standard, c.title, c.note]);
+    const expl = [...prim, ...supp].map(x => [x.s.id, x.r.reasons.map(z => z.text).concat(x.r.paths.map(p => p.text + '.')).concat(x.r.advisory ? [x.r.advisory] : []).join(' ')]);
+    const cost = []; let total = 0;
+    prim.forEach(x => { const c = ctx.cost[x.s.id]; if (c && (c.qty || c.rate)) { const amt = (+c.qty || 0) * (+c.rate || 0); total += amt; cost.push([x.s.id, x.s.item || '', c.unit || '', +c.qty || 0, +c.rate || 0, amt]); } });
+    const meta = [
+      ['Report', 'ISpectra AI: applicable standards report'], ['Generated', new Date().toLocaleString('en-IN')],
+      ['Prepared by', 'Procurement Officer (demo session)'], ['Input type', a.input.typeLabel + (a.input.fileName ? ' (' + a.input.fileName + ')' : '')],
+      ['Input language', a.lang.name], ['Detected context', a.intent], ['Scope', opts.scope === 'approved' ? 'Approved standards only' : 'All recommendations, with review status'],
+      ['Data notice', DEMO_NOTICE]
+    ];
+    return { meta, stdHead, prim, supp, cited, missing, certs, expl, cost, total };
+  }
+
+  async function excel(ctx) {
+    await load(LIBS.xlsx);
+    const d = tableData(ctx); const wb = XLSX.utils.book_new();
+    const add = (name, rows, widths) => { const ws = XLSX.utils.aoa_to_sheet(rows); ws['!cols'] = widths.map(w => ({ wch: w })); XLSX.utils.book_append_sheet(wb, ws, name); };
+    add('Summary', d.meta, [18, 100]);
+    add('Recommended', [d.stdHead].concat(d.prim.map(x => x.cells)), [18, 70, 18, 16, 8, 16, 40]);
+    add('Allied-normative', [d.stdHead].concat(d.supp.map(x => x.cells)), [18, 70, 18, 22, 8, 16, 40]);
+    add('Version check', [['Reference in input', 'Knowledge Base record', 'Latest version', 'Status', 'Note']].concat(d.cited), [22, 20, 16, 22, 70]);
+    if (d.missing.length) add('Missing references', [['Standard', 'Title', 'Latest version']].concat(d.missing), [18, 70, 16]);
+    add('Certifications', [['Scheme', 'Standard', 'Title', 'Note']].concat(d.certs), [12, 18, 70, 60]);
+    add('Explanations', [['Standard', 'Why it was recommended']].concat(d.expl), [18, 120]);
+    if (d.cost.length) add('Cost analysis', [['Standard', 'Item', 'Unit', 'Quantity', 'Unit rate (INR)', 'Amount (INR)']].concat(d.cost).concat([['', '', '', '', 'Total', d.total]]), [18, 40, 12, 12, 16, 18]);
+    const out = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    return { filename: 'ISpectra-report-' + ctx.analysis.id + '.xlsx', data: new Blob([out], { type: 'application/octet-stream' }) };
+  }
+
+  const safe = s => String(s == null ? '' : s).replace(/₹/g, 'Rs.').replace(/≥/g, '>=').replace(/[^\x00-\xFF\u2013\u2014\u2018\u2019\u201C\u201D\u2022\u2026]/g, '?');
+
+  async function pdf(ctx) {
+    await load(LIBS.jspdf); await load(LIBS.autotable);
+    const d = tableData(ctx); const a = ctx.analysis;
+    const doc = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4' });
+    const W = doc.internal.pageSize.getWidth(); let y = 48;
+    doc.setFont('times', 'bold'); doc.setFontSize(18); doc.text('ISpectra AI', 40, y);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(90); doc.text('AI-powered procurement standards intelligence', 40, y + 15);
+    doc.setTextColor(20); doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.text('Applicable standards report', 40, y + 40);
+    y += 52;
+    doc.autoTable({ startY: y, body: d.meta.map(r => r.map(safe)), theme: 'plain', styles: { fontSize: 9, cellPadding: 3 }, columnStyles: { 0: { fontStyle: 'bold', cellWidth: 95 } }, margin: { left: 40, right: 40 } });
+    y = doc.lastAutoTable.finalY + 6;
+    doc.setFillColor(251, 238, 219); doc.rect(40, y, W - 80, 26, 'F'); doc.setFontSize(8.5); doc.setTextColor(120, 70, 8);
+    doc.text(safe(DEMO_NOTICE), 46, y + 16, { maxWidth: W - 92 }); doc.setTextColor(20); y += 42;
+    const head = (txt) => { if (y > 730) { doc.addPage(); y = 48; } doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.text(txt, 40, y); y += 6; };
+    const tbl = (h, rows, cw) => { doc.autoTable({ startY: y + 4, head: [h.map(safe)], body: rows.map(r => r.map(safe)), styles: { fontSize: 8, cellPadding: 3, overflow: 'linebreak' }, headStyles: { fillColor: [18, 35, 63] }, columnStyles: cw || {}, margin: { left: 40, right: 40 } }); y = doc.lastAutoTable.finalY + 22; };
+    const stdCols = { 0: { cellWidth: 55 }, 2: { cellWidth: 48 }, 3: { cellWidth: 55 }, 4: { cellWidth: 32 }, 5: { cellWidth: 50 } };
+    const stdH = ['Standard', 'Title', 'Version', 'Relationship', 'Match', 'Review', 'Remarks'];
+    head('Recommended Indian Standards'); if (d.prim.length) tbl(stdH, d.prim.map(x => x.cells), stdCols); else { doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.text('None in scope.', 40, y + 14); y += 30; }
+    head('Allied / normative and related standards'); if (d.supp.length) tbl(stdH, d.supp.map(x => x.cells), stdCols); else { doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.text('None in scope.', 40, y + 14); y += 30; }
+    head('Version check: standards cited in the input');
+    if (d.cited.length) tbl(['Reference', 'KB record', 'Latest', 'Status', 'Note'], d.cited, { 0: { cellWidth: 70 }, 1: { cellWidth: 60 }, 2: { cellWidth: 45 }, 3: { cellWidth: 70 } }); else { doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.text('The input cites no standards.', 40, y + 14); y += 30; }
+    if (d.missing.length) { head('Recommended standards not referenced in the input'); tbl(['Standard', 'Title', 'Latest version'], d.missing, { 0: { cellWidth: 70 }, 2: { cellWidth: 70 } }); }
+    head('Certification requirements');
+    if (d.certs.length) tbl(['Scheme', 'Standard', 'Title', 'Note'], d.certs, { 0: { cellWidth: 45 }, 1: { cellWidth: 60 } }); else { doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.text('No certification mapping in the demo Knowledge Base for these standards.', 40, y + 14); y += 30; }
+    head('Explanation'); tbl(['Standard', 'Why it was recommended'], d.expl, { 0: { cellWidth: 70 } });
+    if (d.cost.length) { head('Cost analysis (figures entered by the officer)'); tbl(['Standard', 'Item', 'Unit', 'Qty', 'Unit rate (Rs.)', 'Amount (Rs.)'], d.cost.map(r => r.map((v, i) => i >= 3 ? Number(v).toLocaleString('en-IN') : v)).concat([['', '', '', '', 'Total', d.total.toLocaleString('en-IN')]])); }
+    const n = doc.getNumberOfPages();
+    for (let i = 1; i <= n; i++) { doc.setPage(i); doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(120); doc.text('ISpectra AI  |  ' + a.id + '  |  Demo data, not verified against BIS  |  Page ' + i + ' of ' + n, 40, 822); }
+    return { filename: 'ISpectra-report-' + a.id + '.pdf', data: doc.output('blob') };
+  }
+
+  return { pdf, excel };
+})();
+
+
+/* ===== app.js ===== */
+/* ===== ISpectra AI application shell and screens ===== */
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const reduceMotion = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const plural = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
+
+const P = {
+  dashboard: 'M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z',
+  input: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M9 13h6M9 17h6M9 9h1',
+  library: 'M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z',
+  recs: 'M3 7l2 2 4-4M3 17l2 2 4-4M13 6h8M13 12h8M13 18h8',
+  report: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M12 12v6M9 15l3 3 3-3',
+  mic: 'M9 2h6a0 0 0 0 1 0 0v9a3 3 0 0 1-6 0V2zM5 11a7 7 0 0 0 14 0M12 18v4',
+  upload: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12',
+  globe: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20',
+  link: 'M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7',
+  shield: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4',
+  clock: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 6v6l4 2',
+  alert: 'M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01',
+  check: 'M20 6L9 17l-5-5', x: 'M18 6L6 18M6 6l12 12',
+  search: 'M11 3a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM21 21l-4.3-4.3',
+  info: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 16v-4M12 8h.01',
+  db: 'M12 2c5 0 9 1.3 9 3s-4 3-9 3-9-1.3-9-3 4-3 9-3zM3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5M3 12c0 1.7 4 3 9 3s9-1.3 9-3',
+  award: 'M12 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM15.5 13.5L17 22l-5-3-5 3 1.5-8.5',
+  calc: 'M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h8',
+  layers: 'M12 2l10 5-10 5L2 7zM2 12l10 5 10-5M2 17l10 5 10-5',
+  net: 'M12 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM5 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM19 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM12 7v4M12 11l-6 6M12 11l6 6',
+  user: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z',
+  plus: 'M12 5v14M5 12h14', arrow: 'M5 12h14M13 6l6 6-6 6', doc: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6',
+  grid: 'M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z'
+};
+const ic = (n, cls = '') => '<svg class="ic ' + cls + '" viewBox="0 0 24 24" aria-hidden="true"><path d="' + P[n] + '"/></svg>';
+
+/* ---------- data ---------- */
+let kbStandards = KB_STANDARDS.map(Engine.normaliseRecord);
+const S = {
+  view: 'dashboard', uiLang: 'en',
+  kb: Engine.indexKB(kbStandards), kbUpdates: 0,
+  input: { type: 'product', text: '', fileName: '', parseMethod: 'Plain text', langHint: 'auto', busy: false, error: null },
+  analysis: null, pending: null, run: { active: false, stage: -1 },
+  approvals: {}, cost: {}, sel: null, detailOpen: false, filter: 'all',
+  stdq: '', stdKind: 'all', stdSel: null,
+  reportOpts: { scope: 'all' }, reports: [], busyReport: false, listening: false, toast: '', modal: null
+};
+const kbVersion = () => KB_META.version + (S.kbUpdates ? ' + ' + plural(S.kbUpdates, 'update') : '');
+const KIND = { product: 'Product standard', code: 'Code of practice', test: 'Test method', safety: 'Safety / technical' };
+const SAMPLES = [
+  { id: 'cement', label: 'Cement supply (product description)', type: 'product', lang: 'auto', text: 'Supply of 43 grade Ordinary Portland Cement in 50 kg bags, 800 bags, for building construction. Cement shall be packed in moisture-proof bags.' },
+  { id: 'steel', label: 'Reinforcement bars (technical specification)', type: 'spec', lang: 'auto', text: 'TMT bars Fe 500D, 12 mm and 16 mm diameter, 200 tonnes. The bars must be tested for tensile strength before acceptance. Material shall comply with the relevant standard.' },
+  { id: 'tender', label: 'Concrete works (tender text with cited standards)', type: 'tender', lang: 'auto', text: 'Tender for construction of a reinforced concrete community hall.\n1. Concrete of grade M25 shall be used for slabs and beams. Mix design as per IS 456:1978.\n2. Cement shall conform to IS 269:1989.\n3. Coarse aggregate and sand shall conform to IS 383:1970.\n4. Water for mixing shall be tested as per IS 3025.\n5. Bricks for partition walls shall be burnt clay bricks.' },
+  { id: 'hindi', label: 'Hindi input (multilingual)', type: 'product', lang: 'hi', text: 'हमें भवन निर्माण के लिए 43 ग्रेड सीमेंट की आपूर्ति चाहिए। मजबूत सरिया (टीएमटी बार Fe 500D) और पक्की ईंट भी अनिवार्य हैं।' }
+];
+const VS = { current: ['ok', 'Current'], outdated: ['warn', 'Outdated'], unknown: ['neutral', 'Not in Knowledge Base'], noyear: ['warn', 'Year not stated'], multipart: ['neutral', 'Multi-part'], mismatch: ['warn', 'Unknown year'] };
+
+const std = id => S.kb.byId.get(id);
+const app = id => S.approvals[id] || { status: 'pending', note: '' };
+const recOf = id => S.analysis && S.analysis.recs.find(r => r.id === id);
+const primaries = () => S.analysis ? S.analysis.recs.filter(r => r.roles[0] === 'Primary') : [];
+const supporting = () => S.analysis ? S.analysis.recs.filter(r => r.roles[0] !== 'Primary') : [];
+const pendingCount = () => S.analysis ? S.analysis.recs.filter(r => app(r.id).status === 'pending').length : 0;
+const fmtNum = n => Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 });
+const fmtINR = n => { const v = Number(n || 0); const short = v >= 1e7 ? (v / 1e7).toFixed(2) + ' Cr' : v >= 1e5 ? (v / 1e5).toFixed(2) + ' L' : ''; return '₹ ' + fmtNum(v) + (short ? ' (₹ ' + short + ')' : ''); };
+const tags = roles => roles.map(r => '<span class="tag ' + r + '">' + esc(t(r)) + '</span>').join(' ');
+const stChip = (cls, text) => '<span class="st ' + cls + '">' + esc(t(text)) + '</span>';
+const demoPill = () => '<span class="pill demo">' + esc(t('Demo record')) + '</span>';
+
+function demoBanner() {
+  return '<div class="banner" role="note">' + ic('alert') + '<p><b>' + esc(t('Demo data.')) + '</b> ' + esc(t('Standards, versions, amendments and certification mappings below come from the sample Knowledge Base and are not verified against BIS.')) + '</p></div>';
+}
+function emptyState(title, text, btn) {
+  return '<div class="empty"><h4>' + esc(t(title)) + '</h4><p>' + esc(t(text)) + '</p>' + (btn ? '<button class="btn primary" data-action="' + btn[1] + '">' + esc(t(btn[0])) + '</button>' : '') + '</div>';
+}
+
+/* ---------- shell ---------- */
+const NAV = [['dashboard', 'Dashboard', 'dashboard'], ['analysis', 'Input / Analysis', 'input'], ['standards', 'Standards', 'library'], ['recs', 'Recommendations', 'recs'], ['reports', 'Reports', 'report']];
+const TITLES = {
+  dashboard: ['Dashboard', 'Procurement standards at a glance'],
+  analysis: ['Input / Analysis', 'Describe the requirement and follow it through the pipeline'],
+  standards: ['Standards Knowledge Base', 'Indian Standards, versions, amendments and relationships'],
+  recs: ['Recommendations', 'Standards recommended for the specification, with reasons'],
+  reports: ['Reports', 'Export the standards report as PDF or Excel']
+};
+
+function renderShell() {
+  document.documentElement.lang = S.uiLang;
+  $('#app').innerHTML =
+    '<div class="app"><aside class="side"><div class="brand"><b>ISpectra AI</b><span>' + esc(t('AI-powered procurement standards intelligence')) + '</span></div>' +
+    '<nav class="nav" aria-label="Main">' + NAV.map(([id, label, icon]) =>
+      '<button data-action="nav" data-view="' + id + '"' + (S.view === id ? ' aria-current="page"' : '') + '>' + ic(icon) + '<span class="lbl">' + esc(t(label)) + '</span>' +
+      (id === 'recs' && S.analysis && pendingCount() ? '<span class="badge" title="' + esc(t('Pending')) + '">' + pendingCount() + '</span>' : '') + '</button>').join('') + '</nav>' +
+    '<div class="kbnote"><b>' + esc(t('Demo Knowledge Base')) + '</b>' + esc(t('Sample data. Not verified against BIS.')) + '</div></aside>' +
+    '<div class="main"><header class="top"><div class="title" id="ptitle"></div>' +
+    '<label class="sr" for="uilang">' + esc(t('Language')) + '</label><select id="uilang" class="sel" data-bind="uilang" aria-label="' + esc(t('Language')) + '"><option value="en"' + (S.uiLang === 'en' ? ' selected' : '') + '>English</option><option value="hi"' + (S.uiLang === 'hi' ? ' selected' : '') + '>हिन्दी</option></select>' +
+    '<button class="chip-btn" data-action="about">' + ic('layers') + '<span class="hide-sm-t">' + esc(t('Architecture')) + '</span></button>' +
+    '<div class="session" title="' + esc(t('Demo session')) + '"><span class="av">PO</span><span class="who">' + esc(t('Procurement Officer')) + '<br>' + esc(t('Demo session')) + '</span></div></header>' +
+    '<main class="page" id="page"></main></div></div><div id="modal"></div><div id="toast" role="status" aria-live="polite"></div>';
+  renderPage();
+}
+function renderPage() {
+  const [h, sub] = TITLES[S.view];
+  $('#ptitle').innerHTML = esc(t(h)) + '<small>' + esc(t(sub)) + '</small>';
+  document.querySelectorAll('.nav button').forEach(b => { if (b.dataset.view === S.view) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+  const badge = $('.nav button[data-view="recs"]');
+  if (badge) { const old = badge.querySelector('.badge'); if (old) old.remove(); if (S.analysis && pendingCount()) badge.insertAdjacentHTML('beforeend', '<span class="badge">' + pendingCount() + '</span>'); }
+  const fn = { dashboard: viewDashboard, analysis: viewAnalysis, standards: viewStandards, recs: viewRecs, reports: viewReports }[S.view];
+  $('#page').innerHTML = fn();
+  if (S.view === 'analysis') renderPipeline();
+  if (S.view === 'standards') renderStdList();
+}
+function go(view) { S.view = view; S.detailOpen = false; renderPage(); window.scrollTo(0, 0); }
+function toast(msg) { S.toast = msg; const el = $('#toast'); if (el) el.innerHTML = '<div class="toast">' + esc(msg) + '</div>'; clearTimeout(toast.t); toast.t = setTimeout(() => { const e = $('#toast'); if (e) e.innerHTML = ''; }, 4200); }
+
+/* ---------- shared pieces ---------- */
+function stageStrip(a, running) {
+  const st = a ? a.stages : null;
+  const steps = [
+    ['Input', st && st[0].summary], ['Analyse', st && st[2].summary], ['Match', st && st[3].summary], ['Recommend', st && st[4].summary], ['Verify', st && st[5].summary]
+  ];
+  return '<div class="flow">' + steps.map(([n, s]) => '<div class="fs ' + (s ? 'done' : '') + '"><div class="n"><span class="dot">' + (s ? ic('check') : '') + '</span>' + esc(t(n)) + '</div><div class="s">' + esc(s || t('Not started')) + '</div></div>').join('') + '</div>';
+}
+function verLine(id) {
+  const a = S.analysis; if (!a) return '';
+  const c = a.cited.find(x => x.kbId === id);
+  if (!c) return '<div class="small faint">' + esc(t('Not cited in input')) + '</div>';
+  const [cls, txt] = VS[c.status];
+  return '<div class="small">' + stChip(cls, txt) + (c.year ? ' <span class="faint">' + esc(c.year) + '</span>' : '') + '</div>';
+}
+function scoreCell(r) {
+  if (r.score == null) return '<span class="faint">' + esc(t('Linked')) + '</span>';
+  const p = Math.round(r.score * 100);
+  return '<div class="score" title="' + esc(t('Match score')) + '"><i><s style="width:' + p + '%"></s></i><span>' + p + '%</span></div>';
+}
+function approvalCell(r) {
+  const s = app(r.id).status;
+  return '<button class="iconbtn ok' + (s === 'approved' ? ' on' : '') + '" data-action="approve" data-id="' + esc(r.id) + '" title="' + esc(t('Approve')) + '" aria-label="' + esc(t('Approve') + ' ' + r.id) + '" aria-pressed="' + (s === 'approved') + '">' + ic('check') + '</button>' +
+    '<button class="iconbtn no' + (s === 'rejected' ? ' on' : '') + '" data-action="reject" data-id="' + esc(r.id) + '" title="' + esc(t('Reject')) + '" aria-label="' + esc(t('Reject') + ' ' + r.id) + '" aria-pressed="' + (s === 'rejected') + '">' + ic('x') + '</button>';
+}
+function stdRow(r) {
+  const s = std(r.id); const ap = app(r.id).status;
+  const amd = s.amendments.length ? ' · ' + plural(s.amendments.length, 'amendment') : '';
+  return '<div class="srow' + (S.sel === r.id ? ' sel' : '') + '" data-action="select-rec" data-id="' + esc(r.id) + '" tabindex="0" role="button" aria-label="' + esc(r.id + ' ' + s.title) + '">' +
+    '<div class="c-id"><span class="isid">' + esc(s.id) + '</span><div style="margin-top:4px">' + tags(r.roles) + '</div></div>' +
+    '<div class="ttl"><b>' + esc(s.title) + '</b><small>' + (r.advisory ? '<span class="st warn">' + esc(t('Confirm grade')) + '</span>' : '') + (r.paths[0] ? '<span>' + esc(r.paths[0].text) + (r.paths.length > 1 ? ' +' + (r.paths.length - 1) : '') + '</span>' : '<span>' + esc(s.category) + '</span>') + '</small></div>' +
+    '<div class="c-ver"><span>' + esc(s.version) + '</span>' + esc(amd) + verLine(r.id) + '</div>' +
+    '<div class="c-score">' + scoreCell(r) + '</div>' +
+    '<div class="acts">' + (ap !== 'pending' ? '<span class="st ' + (ap === 'approved' ? 'ok' : 'bad') + '">' + esc(t(ap === 'approved' ? 'Approved' : 'Rejected')) + '</span>' : '') + approvalCell(r) + '</div></div>';
+}
+const listHead = () => '<div class="shead"><div>' + esc(t('Standard')) + '</div><div>' + esc(t('Title')) + '</div><div>' + esc(t('Latest version')) + '</div><div>' + esc(t('Match score')) + '</div><div style="text-align:right">' + esc(t('Officer review')) + '</div></div>';
+
+function relChips(ids) {
+  if (!ids || !ids.length) return '<span class="faint">' + esc(t('None recorded')) + '</span>';
+  return '<div class="chips">' + ids.map(i => '<button class="chip" data-action="open-ref" data-id="' + esc(i) + '">' + esc(i) + '</button>').join('') + '</div>';
+}
+function recordSections(s) {
+  const usedBy = (S.kb.usedBy.get(s.id) || []).map(x => x.id).filter((v, i, a) => a.indexOf(v) === i);
+  return '<div class="body" style="border-top:1px solid var(--line)"><h4 style="margin-bottom:8px">' + esc(t('Version and amendments')) + '</h4><dl class="kv">' +
+    '<dt>' + esc(t('Latest version')) + '</dt><dd><b>' + esc(s.version) + '</b> ' + demoPill() + '</dd>' +
+    '<dt>' + esc(t('Earlier versions')) + '</dt><dd>' + (s.history.length ? s.history.map(h => esc(h.version) + ' <span class="faint">(' + esc(t(h.status)) + ')</span>').join(', ') : '<span class="faint">' + esc(t('None recorded')) + '</span>') + '</dd>' +
+    '<dt>' + esc(t('Amendments')) + '</dt><dd>' + (s.amendments.length ? s.amendments.map(m => 'No. ' + esc(m.no) + ': ' + esc(m.note)).join('<br>') : '<span class="faint">' + esc(t('None recorded')) + '</span>') + '</dd></dl></div>' +
+    '<div class="body" style="border-top:1px solid var(--line)"><h4 style="margin-bottom:8px">' + esc(t('Relationships')) + '</h4><dl class="kv">' +
+    '<dt>' + esc(t('Related standards')) + '</dt><dd>' + relChips(s.related) + '</dd>' +
+    '<dt>' + esc(t('Normative references')) + '</dt><dd>' + relChips(s.normative) + '</dd>' +
+    '<dt>' + esc(t('Test methods')) + '</dt><dd>' + relChips(s.tests) + '</dd>' +
+    '<dt>' + esc(t('Safety / technical')) + '</dt><dd>' + relChips(s.safety) + '</dd>' +
+    '<dt>' + esc(t('Referenced by')) + '</dt><dd>' + relChips(usedBy) + '</dd></dl></div>' +
+    '<div class="body" style="border-top:1px solid var(--line)"><h4 style="margin-bottom:8px">' + esc(t('Certification mapping')) + '</h4>' +
+    (s.cert.length ? s.cert.map(c => '<p><span class="tag Related">' + esc(c.scheme) + '</span> <span class="small muted">' + esc(c.note) + '</span></p>').join('') : '<p class="muted small">' + esc(t('No certification mapped in the demo Knowledge Base.')) + '</p>') + '</div>';
+}
+function detailHead(s, extra) {
+  return '<header><div style="min-width:0"><div class="isid" style="font-size:15px">' + esc(s.id) + '</div><div class="small muted" style="margin-top:2px">' + esc(s.title) + '</div></div>' +
+    '<span class="meta">' + (extra || '') + '</span><button class="iconbtn close" data-action="close-detail" aria-label="' + esc(t('Close')) + '">' + ic('x') + '</button></header>';
+}
+
+/* ---------- Dashboard ---------- */
+function viewDashboard() {
+  const a = S.analysis;
+  let h = demoBanner();
+  h += '<div class="card" style="margin-bottom:16px"><header>' + ic('net') + '<h3>' + esc(t('Workflow')) + '</h3><span class="meta">' + esc(t('Input → Analyse → Match → Recommend → Verify')) + '</span></header>' + stageStrip(a) + '</div>';
+  if (a) {
+    const prim = primaries(), sup = supporting();
+    const att = a.cited.filter(c => c.status !== 'current').length + a.missing.length;
+    h += '<div class="card metrics" style="margin-bottom:16px">' +
+      '<div><b>' + prim.length + '</b><span>' + esc(t('Recommended standards')) + '</span></div><div><b>' + sup.length + '</b><span>' + esc(t('Allied, related and normative')) + '</span></div>' +
+      '<div><b>' + att + '</b><span>' + esc(t('Version items needing attention')) + '</span></div><div><b>' + a.certs.length + '</b><span>' + esc(t('Certification requirements')) + '</span></div><div><b>' + pendingCount() + '</b><span>' + esc(t('Pending officer approval')) + '</span></div></div>';
+  }
+  const inputCard = '<div class="card"><header>' + ic('input') + '<h3>' + esc(t('Procurement input')) + '</h3>' + (a ? '<span class="meta">' + esc(a.input.typeLabel) + '</span>' : '') + '</header>' +
+    (a ? '<div class="body"><p class="small muted" style="margin-bottom:6px">' + esc(t('Detected context')) + '</p><p style="margin-bottom:10px"><b>' + esc(a.intent) + '</b></p><p class="small" style="border-left:3px solid var(--line-strong);padding-left:10px;color:var(--muted)">' + esc(a.text.translated.length > 260 ? a.text.translated.slice(0, 257) + '...' : a.text.translated) + '</p>' +
+      '<div class="chips" style="margin-top:12px"><span class="chip ent">' + esc(a.lang.name) + '</span><span class="chip ent">' + plural(a.entities.attributes.length, 'attribute') + '</span><span class="chip ent">' + plural(a.entities.requirements.length, 'requirement') + '</span><span class="chip ent">' + plural(a.entities.standards.length, 'cited standard') + '</span></div>' +
+      '<div class="row" style="margin-top:14px"><button class="btn" data-action="nav" data-view="analysis">' + esc(t('New analysis')) + '</button></div></div>'
+    : '<div class="body"><p style="margin-bottom:4px"><b>' + esc(t("Don't search. Specify. We'll find the standard.")) + '</b></p><p class="muted small" style="margin-bottom:12px">' + esc(t('Describe a product, paste a specification, upload a tender or speak the requirement. Try one of the sample inputs.')) + '</p>' +
+      '<div class="chips">' + SAMPLES.map(s => '<button class="chip" data-action="dash-sample" data-id="' + s.id + '">' + esc(s.label) + '</button>').join('') + '</div><div class="row" style="margin-top:14px"><button class="btn primary" data-action="nav" data-view="analysis">' + esc(t('Start analysis')) + '</button></div></div>') + '</div>';
+  const recCard = '<div class="card"><header>' + ic('recs') + '<h3>' + esc(t('Recommended standards')) + '</h3>' + (a ? '<button class="btn link meta" data-action="nav" data-view="recs">' + esc(t('View all')) + '</button>' : '') + '</header>' +
+    (a && primaries().length ? '<ul class="list" style="padding:0 16px">' + primaries().slice(0, 5).map(r => '<li style="padding:10px 0"><div style="flex:1;min-width:0"><span class="isid">' + esc(r.id) + '</span> <span class="faint small">' + esc(std(r.id).version) + '</span><div class="small muted">' + esc(std(r.id).title) + '</div></div>' + scoreCell(r) + '</li>').join('') + '</ul>' :
+      emptyState(a ? 'No standards matched' : 'No recommendations yet', a ? 'The demo Knowledge Base has no standard matching this input.' : 'Run an analysis to see recommended standards.', a ? null : ['Start analysis', 'go-analysis'])) + '</div>';
+  const relCard = '<div class="card"><header>' + ic('link') + '<h3>' + esc(t('Related standards')) + '</h3></header>' +
+    (a && supporting().length ? '<div class="body">' + ['Testing', 'Safety', 'Normative', 'Related'].map(role => {
+      const list = a.recs.filter(r => r.roles.includes(role) && r.roles[0] !== 'Primary' || (r.roles.includes(role) && role !== 'Related' && false));
+      const all = a.recs.filter(r => r.roles.includes(role));
+      return '<div style="margin-bottom:10px"><div class="row" style="gap:8px">' + tags([role]) + '<span class="small muted">' + plural(all.length, 'standard') + '</span></div><div class="small" style="margin-top:4px">' + (all.slice(0, 5).map(r => esc(r.id)).join(', ') || '<span class="faint">' + esc(t('None')) + '</span>') + '</div></div>';
+    }).join('') + '</div>' : emptyState('No related standards', 'Related, allied and normative standards appear after an analysis.')) + '</div>';
+  let verBody;
+  if (a) {
+    const items = a.cited.filter(c => c.status !== 'current').slice(0, 4).map(c => '<li><div style="flex:1"><span class="isid">' + esc(c.raw) + '</span><div class="small muted">' + esc(c.note) + '</div></div>' + stChip(VS[c.status][0], VS[c.status][1]) + '</li>').join('');
+    verBody = '<div class="body"><div class="chips" style="margin-bottom:10px"><span class="chip ent">' + plural(a.cited.length, 'reference') + ' cited</span><span class="chip ent">' + plural(a.missing.length, 'missing reference') + '</span><span class="chip ent">' + esc(t('Cross-references')) + ' ' + a.crossRef.resolved + '/' + a.crossRef.total + '</span></div>' +
+      (items ? '<ul class="list">' + items + '</ul>' : '<p class="muted small">' + esc(a.cited.length ? t('All cited references match the latest versions in the Knowledge Base.') : t('The input cites no standards.')) + '</p>') + '</div>';
+  } else verBody = emptyState('No version checks yet', 'Cited standards are checked against the latest versions after an analysis.');
+  const verCard = '<div class="card"><header>' + ic('clock') + '<h3>' + esc(t('Version information')) + '</h3>' + (a ? '<button class="btn link meta" data-action="jump-recs" data-target="sec-ver">' + esc(t('Details')) + '</button>' : '') + '</header>' + verBody + '</div>';
+  const certCard = '<div class="card"><header>' + ic('award') + '<h3>' + esc(t('Certification requirements')) + '</h3></header>' +
+    (a && a.certs.length ? '<ul class="list" style="padding:0 16px">' + a.certs.slice(0, 5).map(c => '<li style="padding:10px 0"><span class="tag Related">' + esc(c.scheme) + '</span><div style="flex:1"><span class="isid">' + esc(c.standard) + '</span><div class="small muted">' + esc(c.item || c.title) + '</div></div></li>').join('') + '</ul>' : emptyState('No certification requirements', a ? 'No certification is mapped to the recommended standards in the demo Knowledge Base.' : 'Certification requirements appear after an analysis.')) + '</div>';
+  const repCard = '<div class="card"><header>' + ic('report') + '<h3>' + esc(t('Reports')) + '</h3></header><div class="body">' +
+    (a ? '<p class="small muted" style="margin-bottom:12px">' + esc(t('Export the applicable standards, version check and certification requirements.')) + '</p><div class="row"><button class="btn" data-action="gen" data-fmt="pdf"' + (S.busyReport ? ' disabled' : '') + '>' + ic('report') + esc(t('Download PDF')) + '</button><button class="btn" data-action="gen" data-fmt="xlsx"' + (S.busyReport ? ' disabled' : '') + '>' + ic('grid') + esc(t('Download Excel')) + '</button></div>' : '<p class="muted small">' + esc(t('Reports are available after an analysis.')) + '</p>') +
+    (S.reports.length ? '<p class="small muted" style="margin-top:12px">' + esc(t('Last report')) + ': ' + esc(S.reports[0].name) + '</p>' : '') + '</div></div>';
+  h += '<div class="grid g2">' + inputCard + recCard + relCard + verCard + certCard + repCard + '</div>';
+  return h;
+}
+
+/* ---------- Analysis ---------- */
+function viewAnalysis() {
+  const I = S.input; const types = [['product', 'Product description'], ['spec', 'Technical specification'], ['tender', 'Tender document']];
+  return demoBanner().replace(/<div class="banner"[\s\S]*<\/div>/, m => m) +
+    '<div class="split"><div class="card"><div class="tabs" role="tablist">' + types.map(([k, l]) => '<button role="tab" aria-selected="' + (I.type === k) + '" data-action="input-type" data-type="' + k + '">' + esc(t(l)) + '</button>').join('') + '</div><div class="body">' +
+    (I.type === 'tender' ? '<div class="drop" id="drop">' + ic('upload', 'lg') + '<div style="flex:1"><b>' + esc(t('Upload PDF, DOCX or TXT')) + '</b><div class="small muted">' + esc(I.fileName ? I.fileName + ' · ' + I.parseMethod : t('Text is read in your browser. The file is not uploaded anywhere.')) + '</div></div><button class="btn" data-action="choose-file"' + (I.busy ? ' disabled' : '') + '>' + esc(I.busy ? t('Reading…') : t('Choose file')) + '</button><input type="file" id="file" accept=".pdf,.docx,.txt,application/pdf,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden></div><div style="height:12px"></div>' : '') +
+    '<div class="row" style="margin-bottom:10px"><label class="field" style="flex-direction:row;align-items:center;gap:8px">' + esc(t('Input language')) + '<select class="sel" data-bind="langhint">' + [['auto', 'Auto-detect'], ['en', 'English'], ['hi', 'Hindi']].map(([v, l]) => '<option value="' + v + '"' + (I.langHint === v ? ' selected' : '') + '>' + esc(t(l)) + '</option>').join('') + '</select></label>' +
+    '<button class="chip-btn mic' + (S.listening ? ' rec' : '') + '" id="micbtn" data-action="voice">' + ic('mic') + '<span id="miclbl">' + esc(t(S.listening ? 'Stop recording' : 'Voice input')) + '</span></button>' +
+    '<select class="sel" data-bind="sample" style="margin-left:auto;max-width:100%" aria-label="' + esc(t('Load sample input')) + '"><option value="">' + esc(t('Load sample input')) + '</option>' + SAMPLES.map(s => '<option value="' + s.id + '">' + esc(s.label) + '</option>').join('') + '</select></div>' +
+    '<textarea class="spec" id="spec" data-bind="text" placeholder="' + esc(I.type === 'tender' ? t('Paste tender text here, or upload a document above.') : I.type === 'spec' ? t('Paste or type the technical specification.') : t('Describe the product to be procured, for example its type, grade and quantity.')) + '" aria-label="' + esc(t(types.find(x => x[0] === I.type)[1])) + '">' + esc(I.text) + '</textarea>' +
+    '<div id="inerr">' + (I.error ? '<div class="banner err" style="margin:12px 0 0">' + ic('alert') + '<p>' + esc(I.error) + '</p></div>' : '') + '</div>' +
+    '<div class="row" style="margin-top:12px"><span class="small muted" id="charcount">' + I.text.length.toLocaleString('en-IN') + ' ' + esc(t('characters')) + '</span><span style="margin-left:auto"></span><button class="btn" data-action="clear-input">' + esc(t('Clear')) + '</button><button class="btn primary" data-action="run" id="runbtn"' + (S.run.active ? ' disabled' : '') + '>' + esc(t('Analyse specification')) + '</button></div></div></div>' +
+    '<div id="side"></div></div>';
+}
+function renderPipeline() {
+  const el = $('#side'); if (!el) return;
+  const a = S.run.active ? S.pending : S.analysis;
+  const labels = ['Input', 'Pre-processing', 'AI analysis', 'Standards matching', 'Recommendation', 'Verification'];
+  const done = i => S.run.active ? i < S.run.stage : !!S.analysis;
+  const running = i => S.run.active && i === S.run.stage;
+  let h = '<div class="card"><header>' + ic('layers') + '<h3>' + esc(t('Processing pipeline')) + '</h3></header><div class="body"><ol class="pl">' +
+    labels.map((l, i) => '<li class="' + (done(i) ? 'done' : running(i) ? 'run' : 'idle') + '"><span class="d">' + (done(i) ? ic('check') : '') + '</span><div><b>' + esc(t(l)) + '</b>' +
+      (done(i) && a ? '<div class="sum">' + esc(a.stages[i].summary) + '</div><ul>' + a.stages[i].details.map(d => '<li style="display:list-item;border:0;padding:0;list-style:disc">' + esc(d) + '</li>').join('') + '</ul>' : '') + '</div></li>').join('') + '</ol></div></div>';
+  if (!S.run.active && S.analysis) {
+    const A = S.analysis;
+    h += '<div class="card" style="margin-top:16px"><header>' + ic('doc') + '<h3>' + esc(t('Understanding')) + '</h3></header><div class="body">' +
+      '<dl class="kv"><dt>' + esc(t('Language')) + '</dt><dd>' + esc(A.lang.name) + ' <span class="faint">(' + esc(A.lang.source) + ')</span></dd>' +
+      (A.didTranslate ? '<dt>' + esc(t('Translation')) + '</dt><dd>' + esc(A.text.translated) + (A.untranslated.length ? '<div class="small faint" style="margin-top:4px">' + esc(t('Untranslated terms')) + ': ' + esc(A.untranslated.join(', ')) + '</div>' : '') + '</dd>' : '') +
+      (!A.lang.supported ? '<dt></dt><dd><span class="st warn">' + esc(A.lang.name) + ': ' + esc(t('no translator in this prototype')) + '</span></dd>' : '') +
+      '<dt>' + esc(t('Product')) + '</dt><dd>' + (A.entities.products.length ? '<div class="chips">' + A.entities.products.map(x => '<span class="chip ent">' + esc(x) + '</span>').join('') + '</div>' : '<span class="faint">' + esc(t('None found')) + '</span>') + '</dd>' +
+      '<dt>' + esc(t('Attributes')) + '</dt><dd>' + (A.entities.attributes.length ? '<div class="chips">' + A.entities.attributes.map(x => '<span class="chip ent" title="' + esc(x.type) + '">' + esc(x.value) + '</span>').join('') + '</div>' : '<span class="faint">' + esc(t('None found')) + '</span>') + '</dd>' +
+      '<dt>' + esc(t('Requirements')) + '</dt><dd>' + (A.entities.requirements.length ? '<ul style="margin:0;padding-left:16px">' + A.entities.requirements.slice(0, 5).map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>' : '<span class="faint">' + esc(t('None found')) + '</span>') + '</dd>' +
+      '<dt>' + esc(t('Standards')) + '</dt><dd>' + (A.entities.standards.length ? '<div class="chips">' + A.entities.standards.map(x => '<span class="chip ent">' + esc(x.raw) + '</span>').join('') + '</div>' : '<span class="faint">' + esc(t('None cited')) + '</span>') + '</dd></dl>' +
+      '<div class="row" style="margin-top:14px"><button class="btn primary" data-action="nav" data-view="recs">' + esc(t('View recommendations')) + ' ' + ic('arrow') + '</button></div></div></div>';
+  }
+  el.innerHTML = h;
+}
+
+/* ---------- Standards ---------- */
+function viewStandards() {
+  const kinds = ['all', 'product', 'code', 'test', 'safety'];
+  const s = S.stdSel ? std(S.stdSel) : null;
+  return demoBanner() +
+    '<div class="card" style="margin-bottom:16px"><div class="body row"><div><b>' + esc(KB_META.name) + '</b><div class="small muted">' + esc(t('Version')) + ' ' + esc(kbVersion()) + ' · ' + plural(S.kb.list.length, 'record') + '</div></div>' +
+    '<div class="row" style="margin-left:auto"><button class="btn" data-action="kb-update">' + ic('upload') + esc(t('Update Knowledge Base')) + '</button><button class="btn" data-action="kb-download">' + ic('report') + esc(t('Download Knowledge Base')) + '</button><input type="file" id="kbfile" accept=".json,application/json" hidden></div></div></div>' +
+    '<div class="split"><div class="card"><div class="body row" style="border-bottom:1px solid var(--line)"><label class="field" style="flex:1;min-width:200px;position:relative"><span class="sr">' + esc(t('Search standards')) + '</span><input class="txt" data-bind="stdq" value="' + esc(S.stdq) + '" placeholder="' + esc(t('Search standards')) + '"></label>' +
+    '<div class="chips">' + kinds.map(k => '<button class="chip' + (S.stdKind === k ? ' on' : '') + '" data-action="std-kind" data-kind="' + k + '">' + esc(k === 'all' ? t('All') : KIND[k]) + '</button>').join('') + '</div></div><div class="tw" id="stdlist"></div></div>' +
+    '<aside class="card detail' + (s ? ' open' : ' hide-empty') + '" id="stddetail">' + stdDetail(s) + '</aside></div><div class="backdrop' + (s && S.detailOpen ? ' open' : '') + '" data-action="close-detail"></div>';
+}
+function stdDetail(s) {
+  if (!s) return emptyState('Select a standard', 'Choose a record to see its metadata, versions and relationships.');
+  return detailHead(s, '') + '<div class="body"><dl class="kv"><dt>' + esc(t('Type')) + '</dt><dd>' + esc(KIND[s.kind]) + '</dd><dt>' + esc(t('Category')) + '</dt><dd>' + esc(s.category) + '</dd><dt>' + esc(t('Scope')) + '</dt><dd>' + esc(s.scope || '—') + '</dd><dt>' + esc(t('Record status')) + '</dt><dd>' + demoPill() + '</dd></dl></div>' + recordSections(s);
+}
+function renderStdList() {
+  const el = $('#stdlist'); if (!el) return;
+  const q = S.stdq.trim().toLowerCase();
+  const list = S.kb.list.filter(s => (S.stdKind === 'all' || s.kind === S.stdKind) && (!q || (s.id + ' ' + s.title + ' ' + s.category + ' ' + (s.keywords || []).join(' ')).toLowerCase().includes(q)));
+  el.innerHTML = list.length ? '<table><thead><tr><th>' + esc(t('Standard')) + '</th><th>' + esc(t('Title')) + '</th><th>' + esc(t('Type')) + '</th><th>' + esc(t('Version')) + '</th><th>' + esc(t('Amendments')) + '</th><th>' + esc(t('Certification')) + '</th></tr></thead><tbody>' +
+    list.map(s => '<tr class="clickable' + (S.stdSel === s.id ? ' sel' : '') + '" data-action="select-std" data-id="' + esc(s.id) + '" tabindex="0"><td><span class="isid">' + esc(s.id) + '</span></td><td>' + esc(s.title) + '<div class="small faint">' + esc(s.category) + '</div></td><td>' + esc(KIND[s.kind]) + '</td><td>' + esc(s.version) + '</td><td>' + (s.amendments.length || '<span class="faint">0</span>') + '</td><td>' + (s.cert.length ? s.cert.map(c => '<span class="tag Related">' + esc(c.scheme) + '</span>').join(' ') : '<span class="faint">—</span>') + '</td></tr>').join('') + '</tbody></table>' :
+    emptyState('No standards found', 'Try a different search term or filter.');
+}
+
+/* ---------- Recommendations ---------- */
+function viewRecs() {
+  const a = S.analysis;
+  if (!a) return demoBanner() + '<div class="card">' + emptyState('No analysis yet', 'Enter a product description, specification or tender to get recommended standards.', ['Start analysis', 'go-analysis']) + '</div>';
+  const prim = primaries(), sup = supporting();
+  const roleCount = r => a.recs.filter(x => x.roles[0] !== 'Primary' && x.roles.includes(r)).length;
+  const supF = S.filter === 'all' ? sup : sup.filter(r => r.roles.includes(S.filter));
+  const reviewed = a.recs.length - pendingCount();
+  const stale = a.kbVersion !== kbVersion();
+  const sel = S.sel && recOf(S.sel) ? std(S.sel) : null;
+  let h = demoBanner();
+  if (stale) h += '<div class="banner info">' + ic('info') + '<p>' + esc(t('The Knowledge Base changed after this analysis. Run the analysis again to use the updated records.')) + '</p></div>';
+  h += '<div class="pagehead" style="margin-bottom:12px"><div><p><b>' + esc(a.intent) + '</b></p><p class="small">' + esc(reviewed + ' / ' + a.recs.length + ' ' + t('reviewed')) + ' · ' + esc(plural(a.recs.filter(r => app(r.id).status === 'approved').length, 'approved')) + '</p></div><div class="actions"><button class="btn" data-action="approve-all"' + (pendingCount() ? '' : ' disabled') + '>' + ic('check') + esc(t('Approve all pending')) + '</button><button class="btn primary" data-action="jump" data-target="sec-exp">' + ic('report') + esc(t('Export report')) + '</button></div></div>';
+  h += '<div class="anchors">' + [['sec-rec', 'Recommended Indian Standards'], ['sec-all', 'Allied / normative standards'], ['sec-ver', 'Version check'], ['sec-cert', 'Certification requirements'], ['sec-cost', 'Cost analysis'], ['sec-exp', 'Export report']].map(([id, l]) => '<button class="chip" data-action="jump" data-target="' + id + '">' + esc(t(l)) + '</button>').join('') + '</div>';
+  h += '<div class="split"><div>';
+  h += '<section class="section card" id="sec-rec"><header>' + ic('recs') + '<h3>' + esc(t('Recommended Indian Standards')) + '</h3><span class="meta">' + esc(t('Recommendations are based on standards extracted from the input.')) + '</span></header>' +
+    (prim.length ? listHead() + prim.map(stdRow).join('') : emptyState('No standards matched', 'The demo Knowledge Base has no standard matching this input. Add more detail such as product type, grade or material.', ['Edit input', 'go-analysis'])) + '</section>';
+  h += '<section class="section card" id="sec-all"><header>' + ic('link') + '<h3>' + esc(t('Allied / normative and related standards')) + '</h3></header>' +
+    '<div class="body" style="padding-bottom:8px"><div class="chips">' + [['all', a.recs.length - prim.length]].concat(['Related', 'Testing', 'Safety', 'Normative'].map(r => [r, roleCount(r)])).map(([k, n]) => '<button class="chip' + (S.filter === k ? ' on' : '') + '" data-action="filter" data-role="' + k + '">' + esc(t(k === 'all' ? 'All' : k)) + ' ' + n + '</button>').join('') + '</div></div>' +
+    (supF.length ? listHead() + supF.map(stdRow).join('') : emptyState('Nothing to show', 'No allied or related standards for this filter.')) + '</section>';
+  // version check
+  const missingRows = a.missing.map(id => '<tr><td><span class="isid">' + esc(id) + '</span></td><td>' + esc(std(id).title) + '</td><td>' + esc(std(id).version) + '</td><td>' + tags(recOf(id).roles) + '</td></tr>').join('');
+  h += '<section class="section card" id="sec-ver"><header>' + ic('clock') + '<h3>' + esc(t('Latest versions, revisions and amendments')) + '</h3><span class="meta">' + esc(t('Cross-references')) + ' ' + a.crossRef.resolved + '/' + a.crossRef.total + ' ' + esc(t('resolved')) + '</span></header>' +
+    '<div class="body" style="padding-bottom:8px"><h4>' + esc(t('Standards cited in the input')) + '</h4></div>' +
+    (a.cited.length ? '<div class="tw"><table><thead><tr><th>' + esc(t('Reference in input')) + '</th><th>' + esc(t('Latest version')) + '</th><th>' + esc(t('Status')) + '</th><th>' + esc(t('Note')) + '</th></tr></thead><tbody>' + a.cited.map(c => '<tr' + (c.kbId ? ' class="clickable" data-action="open-ref" data-id="' + esc(c.kbId) + '"' : '') + '><td><span class="isid">' + esc(c.raw) + '</span></td><td>' + esc(c.latest || '—') + '</td><td>' + stChip(VS[c.status][0], VS[c.status][1]) + '</td><td>' + esc(c.note) + '</td></tr>').join('') + '</tbody></table></div>' : '<div class="body" style="padding-top:0"><p class="muted small">' + esc(t('The input cites no standards, so no references could be checked.')) + '</p></div>') +
+    '<div class="body" style="padding-bottom:8px;border-top:1px solid var(--line)"><h4>' + esc(t('Recommended but not referenced in the input')) + '</h4></div>' +
+    (a.missing.length ? '<div class="tw"><table><thead><tr><th>' + esc(t('Standard')) + '</th><th>' + esc(t('Title')) + '</th><th>' + esc(t('Latest version')) + '</th><th>' + esc(t('Relationship')) + '</th></tr></thead><tbody>' + missingRows + '</tbody></table></div>' : '<div class="body" style="padding-top:0"><p class="muted small">' + esc(t('Every recommended standard is referenced in the input.')) + '</p></div>') +
+    '<div class="body" style="padding-bottom:8px;border-top:1px solid var(--line)"><h4>' + esc(t('Latest versions and amendments')) + '</h4></div><div class="tw"><table><thead><tr><th>' + esc(t('Standard')) + '</th><th>' + esc(t('Latest version')) + '</th><th>' + esc(t('Earlier versions')) + '</th><th>' + esc(t('Amendments')) + '</th></tr></thead><tbody>' +
+    a.recs.map(r => { const s = std(r.id); return '<tr class="clickable" data-action="select-rec" data-id="' + esc(r.id) + '"><td><span class="isid">' + esc(s.id) + '</span></td><td>' + esc(s.version) + '</td><td>' + (s.history.length ? s.history.map(x => esc(x.version)).join(', ') : '<span class="faint">—</span>') + '</td><td>' + (s.amendments.length ? plural(s.amendments.length, 'amendment') : '<span class="faint">' + esc(t('None recorded')) + '</span>') + '</td></tr>'; }).join('') + '</tbody></table></div></section>';
+  // certifications
+  h += '<section class="section card" id="sec-cert"><header>' + ic('award') + '<h3>' + esc(t('Certification requirements')) + '</h3><span class="meta">' + esc(t('Demo mapping')) + '</span></header>' +
+    (a.certs.length ? '<div class="tw"><table><thead><tr><th>' + esc(t('Scheme')) + '</th><th>' + esc(t('Standard')) + '</th><th>' + esc(t('Item')) + '</th><th>' + esc(t('Note')) + '</th></tr></thead><tbody>' + a.certs.map(c => '<tr><td><span class="tag Related">' + esc(c.scheme) + '</span></td><td><span class="isid">' + esc(c.standard) + '</span></td><td>' + esc(c.item || c.title) + '</td><td class="muted">' + esc(c.note) + '</td></tr>').join('') + '</tbody></table></div>' : emptyState('No certification requirements', 'No certification is mapped to the recommended standards in the demo Knowledge Base.')) + '</section>';
+  // cost
+  const cp = prim.filter(r => std(r.id).item);
+  h += '<section class="section card" id="sec-cost"><header>' + ic('calc') + '<h3>' + esc(t('Cost analysis')) + '</h3><span class="meta">' + esc(t('Figures entered by the officer')) + '</span></header>' +
+    (cp.length ? '<div class="tw"><table><thead><tr><th>' + esc(t('Item')) + '</th><th>' + esc(t('Unit')) + '</th><th class="num">' + esc(t('Quantity')) + '</th><th class="num">' + esc(t('Unit rate (₹)')) + '</th><th class="num">' + esc(t('Amount')) + '</th></tr></thead><tbody>' + cp.map((r, i) => { const c = S.cost[r.id] || {}; return '<tr><td><span class="isid">' + esc(r.id) + '</span><div class="small muted">' + esc(std(r.id).item) + '</div></td><td style="width:110px"><input class="txt" data-bind="cost" data-id="' + esc(r.id) + '" data-field="unit" value="' + esc(c.unit || '') + '" placeholder="' + esc(t('e.g. bag')) + '" aria-label="' + esc(t('Unit')) + '"></td><td style="width:120px"><input class="txt r" inputmode="decimal" data-bind="cost" data-id="' + esc(r.id) + '" data-field="qty" value="' + esc(c.qty || '') + '" aria-label="' + esc(t('Quantity')) + '"></td><td style="width:130px"><input class="txt r" inputmode="decimal" data-bind="cost" data-id="' + esc(r.id) + '" data-field="rate" value="' + esc(c.rate || '') + '" aria-label="' + esc(t('Unit rate (₹)')) + '"></td><td class="num" id="amt-' + i + '">' + esc(fmtINR((+c.qty || 0) * (+c.rate || 0))) + '</td></tr>'; }).join('') + '</tbody><tfoot><tr><td colspan="4" class="num"><b>' + esc(t('Total')) + '</b></td><td class="num" id="cost-total"><b>' + esc(fmtINR(costTotal())) + '</b></td></tr></tfoot></table></div><div class="body small muted" style="border-top:1px solid var(--line)">' + esc(t('The prototype holds no price data. Amounts are quantity × unit rate as entered, and are included in the report.')) + '</div>' : emptyState('No items to cost', 'Cost analysis lists the recommended product standards once there are matches.')) + '</section>';
+  h += '<section class="section" id="sec-exp">' + exportCard() + '</section></div>';
+  // detail
+  h += '<aside class="card detail' + (S.detailOpen ? ' open' : '') + '" id="detail">' + recDetail(sel) + '</aside></div><div class="backdrop' + (S.detailOpen ? ' open' : '') + '" data-action="close-detail"></div>';
+  return h;
+}
+function costTotal() { return primaries().reduce((n, r) => { const c = S.cost[r.id]; return n + (c ? (+c.qty || 0) * (+c.rate || 0) : 0); }, 0); }
+function recDetail(s) {
+  if (!s) return emptyState('Select a standard', 'Choose a recommendation to see why it was recommended, its versions and its relationships.');
+  const r = recOf(s.id); const ap = app(s.id);
+  return detailHead(s, tags(r.roles)) +
+    '<div class="body"><div class="row" style="margin-bottom:10px"><b>' + esc(t('Officer review')) + '</b><span class="st ' + (ap.status === 'approved' ? 'ok' : ap.status === 'rejected' ? 'bad' : 'neutral') + '" style="margin-left:auto">' + esc(t(ap.status === 'approved' ? 'Approved' : ap.status === 'rejected' ? 'Rejected' : 'Pending')) + '</span></div>' +
+    '<div class="row"><button class="btn ok sm" data-action="approve" data-id="' + esc(s.id) + '">' + ic('check') + esc(t('Approve')) + '</button><button class="btn no sm" data-action="reject" data-id="' + esc(s.id) + '">' + ic('x') + esc(t('Reject')) + '</button>' + (ap.status !== 'pending' ? '<button class="btn sm" data-action="reset" data-id="' + esc(s.id) + '">' + esc(t('Reset')) + '</button>' : '') + '</div>' +
+    '<label class="field" style="margin-top:10px">' + esc(t('Officer remarks')) + '<textarea class="spec" style="min-height:64px" data-bind="remark" data-id="' + esc(s.id) + '">' + esc(ap.note || '') + '</textarea></label>' +
+    (ap.at ? '<p class="small faint" style="margin-top:6px">' + esc(t('Procurement Officer')) + ' · ' + esc(new Date(ap.at).toLocaleString('en-IN')) + '</p>' : '') + '</div>' +
+    '<div class="body" style="border-top:1px solid var(--line)"><h4 style="margin-bottom:8px">' + esc(t('Why this was recommended')) + '</h4>' +
+    (r.score != null ? '<p class="small muted" style="margin-bottom:8px">' + esc(t('Match score')) + ' <b style="color:var(--text)">' + Math.round(r.score * 100) + '%</b> · ' + esc(t('demo matcher')) + '</p>' : '') +
+    (r.advisory ? '<div class="banner" style="margin-bottom:10px">' + ic('alert') + '<p>' + esc(r.advisory) + '</p></div>' : '') +
+    '<ul class="list">' + r.reasons.map(x => '<li>' + ic(x.kind === 'attr-miss' ? 'alert' : 'check') + '<span>' + esc(x.text) + '</span></li>').join('') + r.paths.map(p => '<li>' + ic('link') + '<span>' + esc(p.text) + '.</span></li>').join('') + '</ul>' +
+    (r.evidence.length ? '<p class="small muted" style="margin:12px 0 6px">' + esc(t('Evidence from the input')) + '</p>' + r.evidence.map(e => '<p class="small" style="border-left:3px solid var(--line-strong);padding-left:10px;margin-bottom:6px">' + e.map(sg => sg.m ? '<mark>' + esc(sg.t) + '</mark>' : esc(sg.t)).join('') + '</p>').join('') : '') + '</div>' +
+    '<div class="body" style="border-top:1px solid var(--line)"><dl class="kv"><dt>' + esc(t('Type')) + '</dt><dd>' + esc(KIND[s.kind]) + '</dd><dt>' + esc(t('Scope')) + '</dt><dd>' + esc(s.scope || '—') + '</dd><dt>' + esc(t('Record status')) + '</dt><dd>' + demoPill() + '</dd></dl>' +
+    '<button class="btn link" style="margin-top:8px" data-action="open-in-kb" data-id="' + esc(s.id) + '">' + esc(t('Open in Standards')) + '</button></div>' + recordSections(s);
+}
+
+/* ---------- Reports ---------- */
+function exportCard() {
+  const a = S.analysis; const nApproved = a ? a.recs.filter(r => app(r.id).status === 'approved').length : 0;
+  return '<div class="card"><header>' + ic('report') + '<h3>' + esc(t('Export report')) + '</h3><span class="meta">PDF · Excel</span></header><div class="body">' +
+    '<fieldset style="border:0;padding:0;margin:0 0 12px"><legend class="small muted" style="padding:0;margin-bottom:6px">' + esc(t('Include')) + '</legend><label class="row" style="gap:8px;margin-bottom:6px"><input type="radio" name="scope" data-bind="scope" value="all"' + (S.reportOpts.scope === 'all' ? ' checked' : '') + '>' + esc(t('All recommendations, with review status')) + '</label>' +
+    '<label class="row" style="gap:8px"><input type="radio" name="scope" data-bind="scope" value="approved"' + (S.reportOpts.scope === 'approved' ? ' checked' : '') + '>' + esc(t('Approved standards only')) + ' <span class="faint small">(' + nApproved + ')</span></label></fieldset>' +
+    '<p class="small muted" style="margin-bottom:12px">' + esc(t('Each report contains the applicable standards, allied and normative standards, version check, certification requirements, explanations and any cost figures entered.')) + '</p>' +
+    '<div class="row"><button class="btn primary" data-action="gen" data-fmt="pdf"' + (S.busyReport ? ' disabled' : '') + '>' + ic('report') + esc(S.busyReport ? t('Preparing…') : t('Download PDF')) + '</button><button class="btn" data-action="gen" data-fmt="xlsx"' + (S.busyReport ? ' disabled' : '') + '>' + ic('grid') + esc(t('Download Excel')) + '</button></div></div></div>';
+}
+function viewReports() {
+  const a = S.analysis;
+  if (!a) return demoBanner() + '<div class="card">' + emptyState('No report available', 'Run an analysis first. Reports are generated from the recommended standards.', ['Start analysis', 'go-analysis']) + '</div>';
+  const prim = primaries().length, sup = supporting().length;
+  return demoBanner() + '<div class="split"><div>' + '<div class="section">' + exportCard() + '</div>' +
+    '<div class="card"><header>' + ic('doc') + '<h3>' + esc(t('Report contents')) + '</h3><span class="meta">' + esc(a.id) + '</span></header><ul class="list" style="padding:0 16px">' +
+    [['Recommended Indian Standards', prim], ['Allied / normative and related standards', sup], ['Standards cited in the input', a.cited.length], ['Recommended but not referenced in the input', a.missing.length], ['Certification requirements', a.certs.length], ['Explanation', a.recs.length]].map(([l, n]) => '<li style="padding:10px 0">' + ic('check') + '<span style="flex:1">' + esc(t(l)) + '</span><span class="muted">' + n + '</span></li>').join('') + '<li style="padding:10px 0">' + ic('check') + '<span style="flex:1">' + esc(t('Cost analysis')) + '</span><span class="muted">' + (costTotal() ? fmtINR(costTotal()) : esc(t('No figures entered'))) + '</span></li></ul></div></div>' +
+    '<div class="card"><header>' + ic('clock') + '<h3>' + esc(t('Reports generated in this session')) + '</h3></header>' +
+    (S.reports.length ? '<ul class="list" style="padding:0 16px">' + S.reports.map(r => '<li style="padding:10px 0">' + ic('report') + '<div style="flex:1;min-width:0"><div style="overflow-wrap:anywhere">' + esc(r.name) + '</div><div class="small muted">' + esc(r.at) + ' · ' + esc(r.scope) + '</div></div></li>').join('') + '</ul>' : emptyState('No reports yet', 'Generated reports are listed here.')) + '</div></div>';
+}
+
+/* ---------- Architecture dialog ---------- */
+function aboutModal() {
+  const L = [['Input layer', 'Product description, technical specification, tender documents (PDF, DOCX, TXT), voice and multilingual input.', 'Implemented'],
+    ['Pre-processing & understanding', 'Document parsing, text cleaning and normalisation, language detection and translation, entity extraction.', 'Implemented. OCR is not run, and Hindi translation uses a small demo lexicon.'],
+    ['AI engine', 'Semantic understanding, similarity matching, context and intent analysis, ranking, with a knowledge graph of relationships.', 'A concept-weighted matcher stands in for LLM embeddings and pgvector search.'],
+    ['Standards Knowledge Base', 'Indian Standards repository, allied and normative standards, test methods, safety standards, cross-references, metadata and version control.', 'Sample records that can be updated separately from JSON.'],
+    ['Recommendation engine', 'Rank and filter, recommend standards, suggest certifications, structured output with reasons and references.', 'Implemented on the sample records.'],
+    ['Output / dashboard', 'Recommended standards with latest versions, allied and normative standards, certification requirements, PDF and Excel export.', 'Implemented.']];
+  const T = [['Frontend', 'React / Next.js, Tailwind CSS, PWA, voice input, multilingual UI', 'This prototype is a single HTML page with the same screens, browser speech recognition and an English and Hindi interface.'],
+    ['Backend', 'FastAPI, Python, REST APIs, authentication, API integration', 'Not connected. Engine functions are pure and map to REST endpoints.'],
+    ['AI & NLP', 'LLM, embeddings, semantic search, OCR, speech-to-text', 'Demo matcher in place of LLM and embeddings. OCR is not run.'],
+    ['Data & storage', 'PostgreSQL, pgvector, standards metadata, tender documents, relationship data', 'Sample Knowledge Base held in the page as JSON.'],
+    ['Security & deployment', 'Docker, JWT / RBAC, HTTPS, secure document handling', 'Not implemented in the prototype. Documents are read in the browser and are not uploaded. The officer session is a demo.'],
+    ['Standards intelligence', 'Standards Knowledge Base, related standards, normative references, version and amendment mapping, certification mapping', 'Implemented on the sample records.']];
+  return '<div class="modal" data-action="close-modal"><div class="sheet" role="dialog" aria-modal="true" aria-label="' + esc(t('Architecture')) + '" data-stop="1"><header><h3>' + esc(t('Architecture')) + '</h3><button class="iconbtn" data-action="close-modal" aria-label="' + esc(t('Close')) + '">' + ic('x') + '</button></header><div class="body">' +
+    '<p class="muted small" style="margin-bottom:12px">' + esc(t('Input → Pre-processing → AI engine → Standards Knowledge Base → Recommendation engine → Output. An integration layer covers APIs, procurement portal integration, and authentication and security.')) + '</p>' +
+    '<div class="arch">' + L.map(x => '<div><b>' + esc(x[0]) + '</b><span>' + esc(x[1]) + '</span><span style="color:var(--text);margin-top:3px">' + esc(t('Prototype')) + ': ' + esc(x[2]) + '</span></div>').join('') + '<div><b>Integration layer</b><span>APIs, procurement portal integration, authentication and security.</span><span style="color:var(--text);margin-top:3px">' + esc(t('Prototype')) + ': not connected.</span></div></div>' +
+    '<h4 style="margin:18px 0 0">' + esc(t('Technology stack')) + '</h4><dl class="stack">' + T.map(x => '<dt>' + esc(x[0]) + '</dt><dd>' + esc(x[1]) + '<br><span style="color:var(--text)">' + esc(t('Prototype')) + ': ' + esc(x[2]) + '</span></dd>').join('') + '</dl></div></div></div>';
+}
+
+/* ---------- actions ---------- */
+function setStatus(id, status) {
+  const cur = app(id);
+  S.approvals[id] = { status: cur.status === status ? 'pending' : status, note: cur.note || '', at: cur.status === status ? undefined : new Date().toISOString() };
+  renderPage(); renderShellBadge();
+}
+function renderShellBadge() { /* badge refreshed inside renderPage */ }
+
+async function startAnalysis() {
+  if (S.run.active) return;
+  const text = S.input.text.trim();
+  if (text.length < 8) { S.input.error = t('Enter or upload a requirement first. A few words are enough to start.'); const e = $('#inerr'); if (e) e.innerHTML = '<div class="banner err" style="margin:12px 0 0">' + ic('alert') + '<p>' + esc(S.input.error) + '</p></div>'; return; }
+  S.input.error = null; const e = $('#inerr'); if (e) e.innerHTML = '';
+  S.pending = Engine.analyse(S.kb, { text, type: S.input.type, fileName: S.input.fileName, langHint: S.input.langHint, parseMethod: S.input.fileName ? S.input.parseMethod : 'Plain text', kbVersion: kbVersion() });
+  S.run = { active: true, stage: 0 };
+  const btn = $('#runbtn'); if (btn) btn.disabled = true;
+  for (let i = 0; i < 6; i++) { S.run.stage = i; renderPipeline(); await sleep(reduceMotion() ? 0 : 420); }
+  S.analysis = S.pending; S.pending = null; S.approvals = {}; S.cost = {}; S.filter = 'all'; S.detailOpen = false;
+  S.sel = (primaries()[0] || S.analysis.recs[0] || {}).id || null;
+  S.run = { active: false, stage: 6 };
+  if (S.view === 'analysis') { renderPipeline(); const b = $('#runbtn'); if (b) b.disabled = false; }
+  renderPage();
+}
+
+async function readFile(file) {
+  const I = S.input; I.busy = true; I.error = null; renderPage();
+  const load = src => new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = () => rej(new Error('lib')); document.head.appendChild(s); });
+  try {
+    const name = file.name.toLowerCase(); let text = '', method = '';
+    if (name.endsWith('.txt')) { text = await file.text(); method = 'Plain text file'; }
+    else if (name.endsWith('.docx')) { await load('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js'); const r = await window.mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() }); text = r.value; method = 'DOCX text extraction'; }
+    else if (name.endsWith('.pdf')) {
+      await load('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const pdf = await window.pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise; const parts = [];
+      for (let p = 1; p <= pdf.numPages; p++) { const c = await (await pdf.getPage(p)).getTextContent(); let last = null, line = ''; for (const it of c.items) { const y = it.transform[5]; if (last !== null && Math.abs(y - last) > 3) { parts.push(line); line = ''; } line += it.str + ' '; last = y; } parts.push(line); parts.push(''); }
+      text = parts.join('\n'); method = 'PDF text layer (' + pdf.numPages + ' pages)';
+      if (text.replace(/\s/g, '').length < 20) throw new Error('nolayer');
+    } else throw new Error('type');
+    I.text = text; I.fileName = file.name; I.parseMethod = method;
+  } catch (err) {
+    I.error = err.message === 'nolayer' ? t('This PDF has no readable text layer. Scanned documents need the OCR service, which is not available in this prototype. Paste the text instead.') :
+      err.message === 'type' ? t('Unsupported file type. Use PDF, DOCX or TXT.') : t('The file could not be read in this browser. Paste the text instead.');
+  }
+  I.busy = false; renderPage();
+}
+
+let recog = null;
+function toggleVoice() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { toast(t('Voice input is not supported in this browser. Type or paste the requirement instead.')); return; }
+  if (S.listening && recog) { recog.stop(); return; }
+  recog = new SR(); recog.lang = S.input.langHint === 'hi' ? 'hi-IN' : 'en-IN'; recog.interimResults = false; recog.continuous = true;
+  recog.onresult = ev => { let add = ''; for (let i = ev.resultIndex; i < ev.results.length; i++) if (ev.results[i].isFinal) add += ev.results[i][0].transcript + ' '; if (add) { const ta = $('#spec'); S.input.text = (S.input.text + ' ' + add).trim(); if (ta) { ta.value = S.input.text; } const cc = $('#charcount'); if (cc) cc.textContent = S.input.text.length.toLocaleString('en-IN') + ' ' + t('characters'); } };
+  recog.onerror = ev => { toast(ev.error === 'not-allowed' || ev.error === 'service-not-allowed' ? t('Microphone access was blocked. Allow it in the browser to use voice input.') : t('Voice input stopped: ') + ev.error); };
+  recog.onend = () => { S.listening = false; const b = $('#micbtn'); if (b) b.classList.remove('rec'); const l = $('#miclbl'); if (l) l.textContent = t('Voice input'); };
+  try { recog.start(); S.listening = true; const b = $('#micbtn'); if (b) b.classList.add('rec'); const l = $('#miclbl'); if (l) l.textContent = t('Stop recording'); }
+  catch (e) { toast(t('Voice input could not start.')); }
+}
+
+async function saveOut(filename, data) {
+  let dl = null;
+  try { dl = window.claude && await window.claude.use('downloads'); } catch (e) { dl = null; }
+  if (dl) { await dl.save({ filename, data }); return 'saved'; }
+  const blob = data instanceof Blob ? data : new Blob([data]); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000); return 'link';
+}
+async function generate(fmt) {
+  if (!S.analysis || S.busyReport) return;
+  if (S.reportOpts.scope === 'approved' && !S.analysis.recs.some(r => app(r.id).status === 'approved')) { toast(t('No standards are approved yet. Approve at least one, or include all recommendations.')); return; }
+  S.busyReport = true; renderPage();
+  try {
+    const ctx = { analysis: S.analysis, kb: S.kb, approvals: S.approvals, cost: S.cost, opts: S.reportOpts };
+    const out = fmt === 'pdf' ? await Reports.pdf(ctx) : await Reports.excel(ctx);
+    await saveOut(out.filename, out.data);
+    S.reports.unshift({ name: out.filename, at: new Date().toLocaleString('en-IN'), scope: S.reportOpts.scope === 'approved' ? 'Approved standards only' : 'All recommendations' });
+    toast(t('Report ready: ') + out.filename);
+  } catch (e) {
+    if (e && e.code === 'declined') toast(t('Download cancelled.'));
+    else toast(t('The report could not be created. Check the network connection and try again.'));
+  }
+  S.busyReport = false; renderPage();
+}
+
+function applyKBUpdate(json) {
+  const v = Engine.validateKBUpdate(json);
+  if (!v.ok) { toast(t('Knowledge Base update rejected: ') + v.error); return; }
+  const map = new Map(kbStandards.map(s => [s.id, s]));
+  json.standards.forEach(s => map.set(s.id, Engine.normaliseRecord(s)));
+  kbStandards = Array.from(map.values()); S.kb = Engine.indexKB(kbStandards); S.kbUpdates++;
+  const un = S.kb.unresolved.length;
+  toast(plural(json.standards.length, 'record') + ' ' + t('added or replaced.') + (un ? ' ' + plural(un, 'unresolved reference') + '.' : ''));
+  renderPage();
+}
+
+function openRef(id) {
+  if (S.view === 'recs' && recOf(id)) { S.sel = id; S.detailOpen = true; renderPage(); }
+  else { S.view = 'standards'; S.stdSel = id; S.detailOpen = true; renderPage(); window.scrollTo(0, 0); }
+}
+function jump(id) { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start' }); }
+
+/* ---------- events ---------- */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-action]'); if (!el) return;
+  const act = el.dataset.action, id = el.dataset.id;
+  if (el.classList.contains('modal') && e.target !== el) return;
+  switch (act) {
+    case 'nav': go(el.dataset.view); break;
+    case 'go-analysis': go('analysis'); break;
+    case 'about': $('#modal').innerHTML = aboutModal(); break;
+    case 'close-modal': $('#modal').innerHTML = ''; break;
+    case 'input-type': S.input.type = el.dataset.type; renderPage(); break;
+    case 'choose-file': { const f = $('#file'); if (f) f.click(); break; }
+    case 'clear-input': S.input.text = ''; S.input.fileName = ''; S.input.error = null; renderPage(); break;
+    case 'voice': toggleVoice(); break;
+    case 'run': startAnalysis(); break;
+    case 'dash-sample': { const s = SAMPLES.find(x => x.id === id); S.input = { ...S.input, type: s.type, text: s.text, langHint: s.lang, fileName: '', parseMethod: 'Plain text', error: null }; go('analysis'); break; }
+    case 'select-rec': S.sel = id; S.detailOpen = true; if (S.view !== 'recs') S.view = 'recs'; renderPage(); break;
+    case 'select-std': S.stdSel = id; S.detailOpen = true; renderPage(); break;
+    case 'open-ref': openRef(id); break;
+    case 'open-in-kb': S.view = 'standards'; S.stdSel = id; S.detailOpen = true; renderPage(); window.scrollTo(0, 0); break;
+    case 'close-detail': S.detailOpen = false; renderPage(); break;
+    case 'std-kind': S.stdKind = el.dataset.kind; renderPage(); break;
+    case 'filter': S.filter = el.dataset.role; renderPage(); break;
+    case 'approve': setStatus(id, 'approved'); break;
+    case 'reject': setStatus(id, 'rejected'); break;
+    case 'reset': S.approvals[id] = { status: 'pending', note: app(id).note || '' }; renderPage(); break;
+    case 'approve-all': S.analysis.recs.forEach(r => { if (app(r.id).status === 'pending') S.approvals[r.id] = { status: 'approved', note: app(r.id).note || '', at: new Date().toISOString() }; }); renderPage(); toast(t('All pending standards approved.')); break;
+    case 'jump': jump(el.dataset.target); break;
+    case 'jump-recs': go('recs'); setTimeout(() => jump(el.dataset.target), 30); break;
+    case 'gen': generate(el.dataset.fmt); break;
+    case 'kb-update': { const f = $('#kbfile'); if (f) f.click(); break; }
+    case 'kb-download': saveOut('ispectra-knowledge-base.json', JSON.stringify({ meta: { ...KB_META, version: kbVersion() }, standards: kbStandards }, null, 2)).then(() => toast(t('Knowledge Base file ready.'))).catch(() => toast(t('Download cancelled.'))); break;
+  }
+});
+document.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[data-action="select-rec"],[data-action="select-std"]')) { e.preventDefault(); e.target.click(); }
+  if (e.key === 'Escape') { if ($('#modal') && $('#modal').innerHTML) $('#modal').innerHTML = ''; else if (S.detailOpen) { S.detailOpen = false; renderPage(); } }
+});
+document.addEventListener('input', e => {
+  const b = e.target.dataset && e.target.dataset.bind; if (!b) return;
+  if (b === 'text') { S.input.text = e.target.value; const c = $('#charcount'); if (c) c.textContent = S.input.text.length.toLocaleString('en-IN') + ' ' + t('characters'); }
+  else if (b === 'stdq') { S.stdq = e.target.value; renderStdList(); }
+  else if (b === 'remark') { const id = e.target.dataset.id; S.approvals[id] = { ...app(id), note: e.target.value }; }
+  else if (b === 'cost') {
+    const id = e.target.dataset.id; S.cost[id] = { ...(S.cost[id] || {}), [e.target.dataset.field]: e.target.value };
+    const cp = primaries().filter(r => std(r.id).item); cp.forEach((r, i) => { const c = S.cost[r.id] || {}; const cell = $('#amt-' + i); if (cell) cell.textContent = fmtINR((+c.qty || 0) * (+c.rate || 0)); });
+    const tot = $('#cost-total'); if (tot) tot.innerHTML = '<b>' + esc(fmtINR(costTotal())) + '</b>';
+  }
+});
+document.addEventListener('change', e => {
+  const el = e.target; const b = el.dataset && el.dataset.bind;
+  if (el.id === 'file' && el.files[0]) { readFile(el.files[0]); el.value = ''; return; }
+  if (el.id === 'kbfile' && el.files[0]) { el.files[0].text().then(tx => { try { applyKBUpdate(JSON.parse(tx)); } catch (err) { toast(t('Knowledge Base update rejected: ') + t('the file is not valid JSON.')); } }); el.value = ''; return; }
+  if (!b) return;
+  if (b === 'uilang') { S.uiLang = el.value; LANG = el.value; try { localStorage.setItem('ispectra-lang', LANG); } catch (x) {} renderShell(); }
+  else if (b === 'langhint') S.input.langHint = el.value;
+  else if (b === 'scope') { S.reportOpts.scope = el.value; renderPage(); }
+  else if (b === 'sample' && el.value) { const s = SAMPLES.find(x => x.id === el.value); S.input = { ...S.input, type: s.type, text: s.text, langHint: s.lang, fileName: '', parseMethod: 'Plain text', error: null }; renderPage(); }
+});
+document.addEventListener('dragover', e => { const d = e.target.closest && e.target.closest('#drop'); if (d) { e.preventDefault(); d.classList.add('over'); } });
+document.addEventListener('dragleave', e => { const d = e.target.closest && e.target.closest('#drop'); if (d) d.classList.remove('over'); });
+document.addEventListener('drop', e => { const d = e.target.closest && e.target.closest('#drop'); if (d) { e.preventDefault(); d.classList.remove('over'); if (e.dataTransfer.files[0]) readFile(e.dataTransfer.files[0]); } });
+
+try { const l = localStorage.getItem('ispectra-lang'); if (l && I18N[l]) { S.uiLang = l; LANG = l; } } catch (e) {}
+renderShell();
+})();
+
+
+</script>
+</body>
+</html>
